@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorMoneyStoreCard" format="color" />
+    <attr name="colorMoneyStoreCash" format="color" />
+    <attr name="colorMoneyStoreMonoBlack" format="color" />
+    <attr name="transactionListBg" format="color" />
+    <attr name="colorTransactionGain" format="color" />
+    <attr name="colorTransactionSpend" format="color" />
+</resources>

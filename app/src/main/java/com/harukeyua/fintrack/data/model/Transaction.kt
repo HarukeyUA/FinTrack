@@ -26,6 +26,8 @@ data class Transaction(
     @ColumnInfo(index = true) val moneyStoreId: Int,
     val amount: Long,
     @Embedded val location: Location,
-    val dateTime: OffsetDateTime?,
+    val dateTime: OffsetDateTime,
     val description: String = ""
-)
+) {
+    fun getConvertedBalance(): Float = (amount / 100).toFloat()
+}

@@ -10,7 +10,9 @@ data class MoneyStore(
     val type: StoreType,
     val balance: Long,
     val monoCardType: String? = null
-)
+) {
+    fun getConvertedBalance(): Float = (balance/100).toFloat()
+}
 
 enum class StoreType {
     CARD, CASH, MONO

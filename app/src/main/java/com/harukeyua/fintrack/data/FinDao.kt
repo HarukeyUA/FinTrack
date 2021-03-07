@@ -1,6 +1,7 @@
 package com.harukeyua.fintrack.data
 
 import androidx.lifecycle.LiveData
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -23,6 +24,15 @@ interface FinDao {
 
     @Query("SELECT * FROM transactions ORDER BY datetime(dateTime) ASC")
     fun getTransactions(): LiveData<List<Transaction>>
+
+    @Query("SELECT * FROM transactions ORDER BY datetime(dateTime) ASC")
+    fun getTransactionsPaging(): PagingSource<Int, Transaction>
+
+    @Query("SELECT * FROM transactions WHERE transactionTypeId = :typeId ORDER BY datetime(dateTime) ASC")
+    fun getTransactionsPagingByType(typeId: Int): PagingSource<Int, Transaction>
+
+    @Query("SELECT * FROM transactions WHERE moneyStoreId = :storeId ORDER BY datetime(dateTime) ASC")
+    fun getTransactionsPagingByStore(storeId: Int): PagingSource<Int, Transaction>
 
     @Query("SELECT * FROM transactionTypes ORDER BY name ASC")
     fun getTransactionTypes(): LiveData<List<TransactionType>>
