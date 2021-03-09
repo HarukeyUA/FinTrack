@@ -11,7 +11,13 @@ data class MoneyStore(
     val balance: Long,
     val monoCardType: String? = null
 ) {
-    fun getConvertedBalance(): Float = (balance/100).toFloat()
+    fun getConvertedBalance(): String {
+        val balanceString = balance.toString()
+        return if (balance == 0L)
+            "0.00"
+        else
+            StringBuilder(balanceString).insert(balanceString.length - 2, ".").toString()
+    }
 }
 
 enum class StoreType {

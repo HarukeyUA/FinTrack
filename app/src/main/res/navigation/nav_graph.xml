@@ -9,5 +9,18 @@
         android:id="@+id/overviewFragment"
         android:name="com.harukeyua.fintrack.OverviewFragment"
         android:label="overview_fragment"
-        tools:layout="@layout/overview_fragment" />
+        tools:layout="@layout/overview_fragment" >
+        <action
+            android:id="@+id/action_overviewFragment_to_addMoneyStoreFragment"
+            app:destination="@id/addMoneyStoreFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addMoneyStoreFragment"
+        android:name="com.harukeyua.fintrack.AddMoneyStoreFragment"
+        android:label="add_money_store_fragment"
+        tools:layout="@layout/add_money_store_fragment" >
+        <action
+            android:id="@+id/action_addMoneyStoreFragment_to_overviewFragment"
+            app:destination="@id/overviewFragment" />
+    </fragment>
 </navigation>

@@ -9,7 +9,7 @@ import com.harukeyua.fintrack.data.model.TransactionListItem
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class FinRepo @Inject constructor(private val dao: FinDao) {
+class FinInfoRepo @Inject constructor(private val dao: FinDao) {
 
     val moneyStoreList = dao.getMoneyStores()
 

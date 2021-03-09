@@ -12,7 +12,7 @@ import com.harukeyua.fintrack.databinding.AddNewMoneyStoreItemBinding
 import com.harukeyua.fintrack.databinding.MoneyStoreCardItemBinding
 import com.harukeyua.fintrack.getThemedColor
 
-class MoneyStoreListAdapter :
+class MoneyStoreListAdapter(val onAddClick: () -> Unit) :
     ListAdapter<MoneyStore, RecyclerView.ViewHolder>(MoneyStoreDiffCallback()) {
 
     override fun submitList(list: List<MoneyStore>?) {
@@ -31,11 +31,13 @@ class MoneyStoreListAdapter :
     }
 
 
-    class AddStoreViewHolder(private val binding: AddNewMoneyStoreItemBinding) :
+    inner class AddStoreViewHolder(private val binding: AddNewMoneyStoreItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind() {
-
+            binding.root.setOnClickListener {
+                onAddClick()
+            }
         }
     }
 
@@ -58,8 +60,7 @@ class MoneyStoreListAdapter :
                 }
                 moneyStoreIcon.setImageResource(iconDrawable)
                 balanceDescription.setText(R.string.store_balance)
-                balanceAmount.text =
-                    root.context.getString(R.string.balance_amount, item.getConvertedBalance())
+                balanceAmount.text = item.getConvertedBalance()
                 storeName.text = item.name.trim()
             }
         }

@@ -10,7 +10,7 @@ import com.harukeyua.fintrack.data.FinDao
 import com.harukeyua.fintrack.data.model.MoneyStore
 import com.harukeyua.fintrack.data.model.Transaction
 import com.harukeyua.fintrack.data.model.TransactionType
-import com.harukeyua.fintrack.repos.FinRepo
+import com.harukeyua.fintrack.repos.FinInfoRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
@@ -18,14 +18,14 @@ import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
-class OverviewViewModel @Inject constructor(private val finRepo: FinRepo, private val dao: FinDao) :
+class OverviewViewModel @Inject constructor(private val finInfoRepo: FinInfoRepo, private val dao: FinDao) :
     ViewModel() {
 
     private val _selectedMoneyStore = MutableLiveData<MoneyStore?>()
 
-    val moneyStoreList = finRepo.moneyStoreList
+    val moneyStoreList = finInfoRepo.moneyStoreList
 
-    val transactionTypes = finRepo.typesList
+    val transactionTypes = finInfoRepo.typesList
 
     fun insert(transaction: Transaction) {
         viewModelScope.launch {
@@ -57,7 +57,7 @@ class OverviewViewModel @Inject constructor(private val finRepo: FinRepo, privat
     @ExperimentalCoroutinesApi
     val transactions = flowOf(
         clearListCh.receiveAsFlow().map { PagingData.empty() },
-        _selectedMoneyStore.asFlow().flatMapLatest { finRepo.transactionsListByStore(it?.id) }
+        _selectedMoneyStore.asFlow().flatMapLatest { finInfoRepo.transactionsListByStore(it?.id) }
             .cachedIn(viewModelScope)
     ).flattenMerge(2)
 

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.harukeyua.fintrack.adapters.MoneyStoreListAdapter
 import com.harukeyua.fintrack.adapters.TransactionPagingAdapter
 import com.harukeyua.fintrack.databinding.OverviewFragmentBinding
@@ -34,7 +35,10 @@ class OverviewFragment : Fragment() {
     ): View {
         _binding = OverviewFragmentBinding.inflate(inflater, container, false)
 
-        moneyStoreListAdapter = MoneyStoreListAdapter()
+        moneyStoreListAdapter = MoneyStoreListAdapter() {
+            val action = OverviewFragmentDirections.actionOverviewFragmentToAddMoneyStoreFragment()
+            findNavController().navigate(action)
+        }
         binding.moneyStorePager.adapter = moneyStoreListAdapter
 
 
