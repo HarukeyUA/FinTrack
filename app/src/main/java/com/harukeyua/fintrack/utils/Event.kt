@@ -1,4 +1,4 @@
-package com.harukeyua.fintrack
+package com.harukeyua.fintrack.utils
 
 open class Event<out T>(private val content: T) {
 

@@ -1,4 +1,4 @@
-package com.harukeyua.fintrack
+package com.harukeyua.fintrack.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,10 @@ import android.widget.AutoCompleteTextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.harukeyua.fintrack.data.model.StoreType
+import com.harukeyua.fintrack.viewmodels.AddMoneyStoreViewModel
+import com.harukeyua.fintrack.R
+import com.harukeyua.fintrack.currencyInputFilter
+import com.harukeyua.fintrack.data.model.AccountType
 import com.harukeyua.fintrack.databinding.AddMoneyStoreFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -67,9 +70,9 @@ class AddMoneyStoreFragment : Fragment() {
             val accountName = binding.accountName.editText?.text.toString()
             val accountType =
                 when ((binding.accountType.editText as AutoCompleteTextView).text.toString()) {
-                    resources.getString(R.string.account_type_card) -> StoreType.CARD
-                    resources.getString(R.string.account_type_wallet) -> StoreType.CASH
-                    else -> StoreType.CARD
+                    resources.getString(R.string.account_type_card) -> AccountType.CARD
+                    resources.getString(R.string.account_type_wallet) -> AccountType.CASH
+                    else -> AccountType.CARD
                 }
             val accountBalance = binding.accountBalanceText.text.toString()
             viewModel.addAccount(accountName, accountType, accountBalance)

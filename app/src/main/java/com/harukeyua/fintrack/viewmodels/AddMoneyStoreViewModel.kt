@@ -1,13 +1,14 @@
-package com.harukeyua.fintrack
+package com.harukeyua.fintrack.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.harukeyua.fintrack.data.model.MoneyStore
-import com.harukeyua.fintrack.data.model.StoreType
+import com.harukeyua.fintrack.data.model.Account
+import com.harukeyua.fintrack.data.model.AccountType
 import com.harukeyua.fintrack.repos.FinEditRepo
+import com.harukeyua.fintrack.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,7 +31,7 @@ class AddMoneyStoreViewModel @Inject constructor(private val finEditRepo: FinEdi
     val navigateToOverview: LiveData<Event<Unit>>
         get() = _navigateToOverview
 
-    fun addAccount(accountName: String, accountType: StoreType, accountBalance: String) {
+    fun addAccount(accountName: String, accountType: AccountType, accountBalance: String) {
         if (accountName.isEmpty()) {
             _accountNameError.value = true
             return
@@ -40,8 +41,8 @@ class AddMoneyStoreViewModel @Inject constructor(private val finEditRepo: FinEdi
             Log.d("add", "balance: $balance")
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
-                    finEditRepo.insertMoneyStore(
-                        MoneyStore(
+                    finEditRepo.insertAccount(
+                        Account(
                             name = accountName,
                             type = accountType,
                             balance = balance

@@ -1,15 +1,13 @@
-package com.harukeyua.fintrack
+package com.harukeyua.fintrack.viewmodels
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.harukeyua.fintrack.data.FinDao
-import com.harukeyua.fintrack.data.model.MoneyStore
+import com.harukeyua.fintrack.data.model.Account
 import com.harukeyua.fintrack.data.model.Transaction
 import com.harukeyua.fintrack.data.model.TransactionType
+import com.harukeyua.fintrack.getConvertedBalance
 import com.harukeyua.fintrack.repos.FinInfoRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -18,14 +16,21 @@ import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
-class OverviewViewModel @Inject constructor(private val finInfoRepo: FinInfoRepo, private val dao: FinDao) :
-    ViewModel() {
+class OverviewViewModel @Inject constructor(
+    private val finInfoRepo: FinInfoRepo,
+    private val dao: FinDao
+) : ViewModel() {
 
-    private val _selectedMoneyStore = MutableLiveData<MoneyStore?>()
+    private val _selectedMoneyStore = MutableLiveData<Account?>()
 
-    val moneyStoreList = finInfoRepo.moneyStoreList
+    val accountsList = finInfoRepo.accountsList
 
     val transactionTypes = finInfoRepo.typesList
+
+    private val _totalBalance = MutableLiveData<String>()
+    val totalBalance: LiveData<String>
+        get() = _totalBalance
+
 
     fun insert(transaction: Transaction) {
         viewModelScope.launch {
@@ -43,10 +48,10 @@ class OverviewViewModel @Inject constructor(private val finInfoRepo: FinInfoRepo
         }
     }
 
-    fun insertMoneyStore(store: MoneyStore) {
+    fun insertMoneyStore(store: Account) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                dao.insertMoneyStore(store)
+                dao.insertAccount(store)
             }
         }
     }
@@ -61,13 +66,17 @@ class OverviewViewModel @Inject constructor(private val finInfoRepo: FinInfoRepo
             .cachedIn(viewModelScope)
     ).flattenMerge(2)
 
-    fun showTransactionsForStore(moneyStore: MoneyStore) {
+    fun showTransactionsForStore(account: Account) {
         clearListCh.offer(Unit)
-        _selectedMoneyStore.value = moneyStore
+        _selectedMoneyStore.value = account
     }
 
     fun showAllTransactions() {
         clearListCh.offer(Unit)
         _selectedMoneyStore.value = null
+    }
+
+    fun updateTotalBalance(accounts: List<Account>) {
+        _totalBalance.value = getConvertedBalance(accounts.sumOf { it.balance })
     }
 }

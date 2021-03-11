@@ -7,16 +7,6 @@ import android.util.TypedValue
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.appcompat.content.res.AppCompatResources
-import kotlin.math.roundToLong
-
-fun Context.getThemeColor(@AttrRes attribute: Int): ColorStateList = TypedValue().let {
-    theme.resolveAttribute(
-        attribute,
-        it,
-        true
-    )
-    AppCompatResources.getColorStateList(this, it.resourceId)
-}
 
 @ColorInt
 fun Context.getThemedColor(@AttrRes attribute: Int) =
@@ -35,3 +25,11 @@ val currencyInputFilter =
         else
             null
     }
+
+fun getConvertedBalance(balance: Long): String {
+    val balanceString = balance.toString()
+    return if (balance == 0L)
+        "0.00"
+    else
+        StringBuilder(balanceString).insert(balanceString.length - 2, ".").toString()
+}

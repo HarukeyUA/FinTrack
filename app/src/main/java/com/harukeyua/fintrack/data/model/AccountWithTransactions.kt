@@ -3,11 +3,11 @@ package com.harukeyua.fintrack.data.model
 import androidx.room.Embedded
 import androidx.room.Relation
 
-data class MoneyStoreWithTransactions(
-    @Embedded val moneyStore: MoneyStore,
+data class AccountWithTransactions(
+    @Embedded val account: Account,
     @Relation(
         parentColumn = "id",
-        entityColumn = "moneyStoreId"
+        entityColumn = "accountId"
     )
     val transactions: List<Transaction>
 )

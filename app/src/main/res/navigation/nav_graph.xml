@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/overviewFragment"
-        android:name="com.harukeyua.fintrack.OverviewFragment"
+        android:name="com.harukeyua.fintrack.ui.OverviewFragment"
         android:label="overview_fragment"
         tools:layout="@layout/overview_fragment" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/addMoneyStoreFragment"
-        android:name="com.harukeyua.fintrack.AddMoneyStoreFragment"
+        android:name="com.harukeyua.fintrack.ui.AddMoneyStoreFragment"
         android:label="add_money_store_fragment"
         tools:layout="@layout/add_money_store_fragment" >
         <action

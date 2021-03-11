@@ -62,12 +62,12 @@ class FinDatabaseReadWriteTest {
     @Throws(Exception::class)
     fun writeMoneyStoreAndRead() {
         val moneyStore =
-            MoneyStore(id = 1, name = "Test money store", type = StoreType.CARD, balance = 500)
+            Account(id = 1, name = "Test money store", type = AccountType.CARD, balance = 500)
         runBlocking {
-            finDao.insertMoneyStore(moneyStore)
+            finDao.insertAccount(moneyStore)
         }
 
-        val stores = finDao.getMoneyStores()
+        val stores = finDao.getAccounts()
         val result = stores.getValueBlocking()
             ?: throw InvalidObjectException("null returned instead of types")
         assertThat(result[0]).isEqualTo(moneyStore)
@@ -78,7 +78,7 @@ class FinDatabaseReadWriteTest {
     fun writeTransactionAndRead() {
         val transactionType = TransactionType(id = 1, name = "Test type")
         val moneyStore =
-            MoneyStore(id = 1, name = "Test money store", type = StoreType.CARD, balance = 500)
+            Account(id = 1, name = "Test money store", type = AccountType.CARD, balance = 500)
         val location = Location(lon = 1f, lat = 1f, "Test Shop")
         val dateTime = OffsetDateTime.parse(
             "2017-10-17T11:01:12.972-02:00",
@@ -88,7 +88,7 @@ class FinDatabaseReadWriteTest {
             Transaction(
                 id = 1,
                 transactionTypeId = 1,
-                moneyStoreId = 1,
+                accountId = 1,
                 500,
                 location = location,
                 dateTime = dateTime,
@@ -96,13 +96,13 @@ class FinDatabaseReadWriteTest {
             )
 
         runBlocking {
-            finDao.insertMoneyStore(moneyStore)
+            finDao.insertAccount(moneyStore)
             finDao.insertTransactionType(transactionType)
             finDao.insertTransaction(transaction)
         }
 
         val transactions = finDao.getTransactions()
-        val moneyStoreWithTransactions = finDao.getMoneyStoreWithTransactions()
+        val moneyStoreWithTransactions = finDao.getAccountWithTransactions()
         val typeWithTransactions = finDao.getTransactionTypeWithTransactions()
         val result = transactions.getValueBlocking()
             ?: throw InvalidObjectException("null returned instead of types")
@@ -112,7 +112,7 @@ class FinDatabaseReadWriteTest {
             ?: throw InvalidObjectException("null returned instead of types")
 
         assertThat(result[0]).isEqualTo(transaction)
-        assertThat(resultStoreWithTransactions[0].moneyStore).isEqualTo(moneyStore)
+        assertThat(resultStoreWithTransactions[0].account).isEqualTo(moneyStore)
         assertThat(resultStoreWithTransactions[0].transactions[0]).isEqualTo(transaction)
         assertThat(resultTypeWithTransactions[0].transactionType).isEqualTo(transactionType)
         assertThat(resultTypeWithTransactions[0].transactions[0]).isEqualTo(transaction)

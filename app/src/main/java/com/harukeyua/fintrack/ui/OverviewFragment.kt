@@ -1,4 +1,4 @@
-package com.harukeyua.fintrack
+package com.harukeyua.fintrack.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.harukeyua.fintrack.adapters.MoneyStoreListAdapter
+import com.harukeyua.fintrack.viewmodels.OverviewViewModel
+import com.harukeyua.fintrack.adapters.AccountListAdapter
 import com.harukeyua.fintrack.adapters.TransactionPagingAdapter
 import com.harukeyua.fintrack.databinding.OverviewFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,7 +25,7 @@ class OverviewFragment : Fragment() {
     private var _binding: OverviewFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var moneyStoreListAdapter: MoneyStoreListAdapter
+    private lateinit var accountListAdapter: AccountListAdapter
     private lateinit var transactionsAdapter: TransactionPagingAdapter
 
     @ExperimentalCoroutinesApi
@@ -35,11 +36,11 @@ class OverviewFragment : Fragment() {
     ): View {
         _binding = OverviewFragmentBinding.inflate(inflater, container, false)
 
-        moneyStoreListAdapter = MoneyStoreListAdapter() {
+        accountListAdapter = AccountListAdapter() {
             val action = OverviewFragmentDirections.actionOverviewFragmentToAddMoneyStoreFragment()
             findNavController().navigate(action)
         }
-        binding.moneyStorePager.adapter = moneyStoreListAdapter
+        binding.moneyStorePager.adapter = accountListAdapter
 
 
         transactionsAdapter = TransactionPagingAdapter()
@@ -56,12 +57,17 @@ class OverviewFragment : Fragment() {
     }
 
     private fun subscribe() {
-        viewModel.moneyStoreList.observe(viewLifecycleOwner) { list ->
-            moneyStoreListAdapter.submitList(list)
+        viewModel.accountsList.observe(viewLifecycleOwner) { list ->
+            accountListAdapter.submitList(list)
+            viewModel.updateTotalBalance(list)
         }
 
         viewModel.transactionTypes.observe(viewLifecycleOwner) { list ->
             transactionsAdapter.transactionTypes = list
+        }
+
+        viewModel.totalBalance.observe(viewLifecycleOwner) { balance ->
+            accountListAdapter.totalBalance = balance
         }
     }
 

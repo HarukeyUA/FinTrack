@@ -5,14 +5,14 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.harukeyua.fintrack.data.model.MoneyStore
+import com.harukeyua.fintrack.data.model.Account
 import com.harukeyua.fintrack.data.model.Transaction
 import com.harukeyua.fintrack.data.model.TransactionType
 
 const val DATABASE_NAME = "fin.db"
 
 @Database(
-    entities = [TransactionType::class, MoneyStore::class, Transaction::class],
+    entities = [TransactionType::class, Account::class, Transaction::class],
     version = 1,
     exportSchema = false
 )

@@ -10,6 +10,7 @@ import com.harukeyua.fintrack.data.model.TransactionListItem
 import com.harukeyua.fintrack.data.model.TransactionType
 import com.harukeyua.fintrack.databinding.TransactionListItemBinding
 import com.harukeyua.fintrack.databinding.TransactionListSeparatorBinding
+import com.harukeyua.fintrack.getConvertedBalance
 import com.harukeyua.fintrack.getThemedColor
 
 class TransactionPagingAdapter :
@@ -27,10 +28,7 @@ class TransactionPagingAdapter :
                 with(binding) {
                     transactionDescription.text = item.transaction.description.trim()
                     locationText.text = item.transaction.location.name.trim()
-                    var amount = root.context.getString(
-                        R.string.balance_amount,
-                        item.transaction.getConvertedBalance()
-                    )
+                    var amount = getConvertedBalance(item.transaction.amount)
                     if (item.transaction.amount > 0) {
                         amount = "+ $amount"
                         operationText.setTextColor(root.context.getThemedColor(R.attr.colorTransactionGain))

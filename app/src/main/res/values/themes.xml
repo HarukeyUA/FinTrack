@@ -19,6 +19,7 @@
         <item name="transactionListBg">@color/half_baked_5</item>
         <item name="colorTransactionSpend">@color/red_400</item>
         <item name="colorTransactionGain">@color/light_green_300</item>
+        <item name="colorTotalBalance">@color/purple_300</item>
     </style>
 
     <style name="roundedCorners">

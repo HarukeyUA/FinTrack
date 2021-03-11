@@ -7,8 +7,8 @@ import java.time.OffsetDateTime
     tableName = "transactions",
     foreignKeys = [
         ForeignKey(
-            entity = MoneyStore::class,
-            childColumns = ["moneyStoreId"],
+            entity = Account::class,
+            childColumns = ["accountId"],
             parentColumns = ["id"],
             onDelete = ForeignKey.CASCADE
         ),
@@ -23,11 +23,9 @@ import java.time.OffsetDateTime
 data class Transaction(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(index = true) val transactionTypeId: Int,
-    @ColumnInfo(index = true) val moneyStoreId: Int,
+    @ColumnInfo(index = true) val accountId: Int,
     val amount: Long,
     @Embedded val location: Location,
     val dateTime: OffsetDateTime,
     val description: String = ""
-) {
-    fun getConvertedBalance(): Float = (amount / 100).toFloat()
-}
+)

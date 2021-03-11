@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class FinInfoRepo @Inject constructor(private val dao: FinDao) {
 
-    val moneyStoreList = dao.getMoneyStores()
+    val accountsList = dao.getAccounts()
 
     val typesList = dao.getTransactionTypes()
 
@@ -25,7 +25,7 @@ class FinInfoRepo @Inject constructor(private val dao: FinDao) {
         if (storeId == null) {
             dao.getTransactionsPaging()
         } else {
-            dao.getTransactionsPagingByStore(storeId)
+            dao.getTransactionsPagingByAccount(storeId)
         }
     }.flow.map { pagingData ->
         pagingData.map { item -> TransactionListItem.Item(item) }

@@ -6,4 +6,5 @@
     <attr name="transactionListBg" format="color" />
     <attr name="colorTransactionGain" format="color" />
     <attr name="colorTransactionSpend" format="color" />
+    <attr name="colorTotalBalance" format="color" />
 </resources>

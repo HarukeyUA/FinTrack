@@ -14,7 +14,7 @@ interface FinDao {
     suspend fun insertTransactionType(transactionType: TransactionType)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMoneyStore(moneyStore: MoneyStore)
+    suspend fun insertAccount(account: Account)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTransaction(transaction: Transaction)
@@ -31,18 +31,18 @@ interface FinDao {
     @Query("SELECT * FROM transactions WHERE transactionTypeId = :typeId ORDER BY datetime(dateTime) ASC")
     fun getTransactionsPagingByType(typeId: Int): PagingSource<Int, Transaction>
 
-    @Query("SELECT * FROM transactions WHERE moneyStoreId = :storeId ORDER BY datetime(dateTime) ASC")
-    fun getTransactionsPagingByStore(storeId: Int): PagingSource<Int, Transaction>
+    @Query("SELECT * FROM transactions WHERE accountId = :accountId ORDER BY datetime(dateTime) ASC")
+    fun getTransactionsPagingByAccount(accountId: Int): PagingSource<Int, Transaction>
 
     @Query("SELECT * FROM transactionTypes ORDER BY name ASC")
     fun getTransactionTypes(): LiveData<List<TransactionType>>
 
-    @Query("SELECT * FROM moneyStores ORDER BY name ASC")
-    fun getMoneyStores(): LiveData<List<MoneyStore>>
+    @Query("SELECT * FROM accounts ORDER BY name ASC")
+    fun getAccounts(): LiveData<List<Account>>
 
     @androidx.room.Transaction
-    @Query("SELECT * FROM moneyStores ORDER BY name ASC")
-    fun getMoneyStoreWithTransactions(): LiveData<List<MoneyStoreWithTransactions>>
+    @Query("SELECT * FROM accounts ORDER BY name ASC")
+    fun getAccountWithTransactions(): LiveData<List<AccountWithTransactions>>
 
     @androidx.room.Transaction
     @Query("SELECT * FROM transactionTypes ORDER BY name ASC")

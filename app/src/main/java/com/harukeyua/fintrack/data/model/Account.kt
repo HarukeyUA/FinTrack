@@ -3,11 +3,11 @@ package com.harukeyua.fintrack.data.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "moneyStores")
-data class MoneyStore(
+@Entity(tableName = "accounts")
+data class Account(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
-    val type: StoreType,
+    val type: AccountType,
     val balance: Long,
     val monoCardType: String? = null
 ) {
@@ -20,6 +20,6 @@ data class MoneyStore(
     }
 }
 
-enum class StoreType {
+enum class AccountType {
     CARD, CASH, MONO
 }
