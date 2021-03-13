@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_overviewFragment_to_addMoneyStoreFragment"
             app:destination="@id/addMoneyStoreFragment" />
+        <action
+            android:id="@+id/action_overviewFragment_to_addTransactionFragment"
+            app:destination="@id/addTransactionFragment" />
     </fragment>
     <fragment
         android:id="@+id/addMoneyStoreFragment"
@@ -21,6 +24,14 @@
         tools:layout="@layout/add_money_store_fragment" >
         <action
             android:id="@+id/action_addMoneyStoreFragment_to_overviewFragment"
+            app:destination="@id/overviewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addTransactionFragment"
+        android:name="com.harukeyua.fintrack.ui.AddTransactionFragment"
+        android:label="@string/add_transaction_label" >
+        <action
+            android:id="@+id/action_addTransactionFragment_to_overviewFragment"
             app:destination="@id/overviewFragment" />
     </fragment>
 </navigation>

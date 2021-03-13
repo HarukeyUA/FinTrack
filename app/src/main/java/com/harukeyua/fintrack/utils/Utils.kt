@@ -33,3 +33,15 @@ fun getConvertedBalance(balance: Long): String {
     else
         StringBuilder(balanceString).insert(balanceString.length - 2, ".").toString()
 }
+
+fun convertToPenny(item: String): Long {
+    val dotPosition = item.indexOfFirst { it == ',' || it == '.' }
+    return if (item.contains("[.,]".toRegex()) && item.length - dotPosition == 3)
+        (item.replace("[.,]".toRegex(), "")).toLong()
+    else if (item.contains("[.,]".toRegex()) && item.length - dotPosition == 2)
+        (item.replace("[.,]".toRegex(), "0")).toLong()
+    else if (item.isNotEmpty())
+        item.plus("00").toLong()
+    else
+        0L
+}

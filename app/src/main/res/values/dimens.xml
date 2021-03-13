@@ -5,4 +5,5 @@
     <dimen name="preview_icon_padding">6dp</dimen>
     <dimen name="default_padding">16dp</dimen>
     <dimen name="small_padding">8dp</dimen>
+    <dimen name="margin_medium">8dp</dimen>
 </resources>

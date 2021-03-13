@@ -27,16 +27,20 @@
 
             <TextView
                 android:id="@+id/transaction_description"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="1"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1.medium"
                 tools:text="Milk and food" />
 
             <TextView
                 android:id="@+id/location_text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:lines="1"
                 tools:text="Varus" />
 
         </LinearLayout>
@@ -62,6 +66,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:lines="1"
                 android:textAlignment="textEnd"
                 tools:text="Food" />
         </LinearLayout>

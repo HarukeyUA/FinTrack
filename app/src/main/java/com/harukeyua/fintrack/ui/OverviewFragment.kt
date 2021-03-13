@@ -53,6 +53,11 @@ class OverviewFragment : Fragment() {
 
         subscribe()
 
+        binding.addTransactionButton.setOnClickListener {
+            val action = OverviewFragmentDirections.actionOverviewFragmentToAddTransactionFragment()
+            findNavController().navigate(action)
+        }
+
         return binding.root
     }
 

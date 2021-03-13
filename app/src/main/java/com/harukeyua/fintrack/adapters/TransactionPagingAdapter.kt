@@ -27,7 +27,7 @@ class TransactionPagingAdapter :
             item?.let {
                 with(binding) {
                     transactionDescription.text = item.transaction.description.trim()
-                    locationText.text = item.transaction.location.name.trim()
+                    locationText.text = item.transaction.location?.name?.trim()
                     var amount = getConvertedBalance(item.transaction.amount)
                     if (item.transaction.amount > 0) {
                         amount = "+ $amount"

@@ -25,7 +25,7 @@ data class Transaction(
     @ColumnInfo(index = true) val transactionTypeId: Int,
     @ColumnInfo(index = true) val accountId: Int,
     val amount: Long,
-    @Embedded val location: Location,
+    @Embedded val location: Location? = null,
     val dateTime: OffsetDateTime,
     val description: String = ""
 )

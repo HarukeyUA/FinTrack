@@ -2,11 +2,9 @@ package com.harukeyua.fintrack.data
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagingSource
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.harukeyua.fintrack.data.model.*
+import com.harukeyua.fintrack.data.model.Transaction
 
 @Dao
 interface FinDao {
@@ -16,22 +14,25 @@ interface FinDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAccount(account: Account)
 
+    @Update(onConflict = OnConflictStrategy.ABORT)
+    suspend fun updateAccount(account: Account)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTransaction(transaction: Transaction)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTransaction(transaction: List<Transaction>)
 
-    @Query("SELECT * FROM transactions ORDER BY datetime(dateTime) ASC")
+    @Query("SELECT * FROM transactions ORDER BY datetime(dateTime) DESC")
     fun getTransactions(): LiveData<List<Transaction>>
 
-    @Query("SELECT * FROM transactions ORDER BY datetime(dateTime) ASC")
+    @Query("SELECT * FROM transactions ORDER BY datetime(dateTime) DESC")
     fun getTransactionsPaging(): PagingSource<Int, Transaction>
 
-    @Query("SELECT * FROM transactions WHERE transactionTypeId = :typeId ORDER BY datetime(dateTime) ASC")
+    @Query("SELECT * FROM transactions WHERE transactionTypeId = :typeId ORDER BY datetime(dateTime) DESC")
     fun getTransactionsPagingByType(typeId: Int): PagingSource<Int, Transaction>
 
-    @Query("SELECT * FROM transactions WHERE accountId = :accountId ORDER BY datetime(dateTime) ASC")
+    @Query("SELECT * FROM transactions WHERE accountId = :accountId ORDER BY datetime(dateTime) DESC")
     fun getTransactionsPagingByAccount(accountId: Int): PagingSource<Int, Transaction>
 
     @Query("SELECT * FROM transactionTypes ORDER BY name ASC")

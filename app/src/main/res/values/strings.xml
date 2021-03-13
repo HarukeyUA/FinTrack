@@ -8,4 +8,21 @@
     <string name="account_type_card">Card</string>
     <string name="account_type_wallet">Wallet</string>
     <string name="account_name_error">Account name is required</string>
+    <string name="transaction_description_hint">Description</string>
+    <string name="date_standard">%1$td/%1$tm/%1$tY</string>
+    <string name="time_standard">%1$tH:%1$tM</string>
+    <string name="add_transaction_label">Add transaction</string>
+    <string name="add_transaction_menu_item">Add</string>
+    <string name="transaction_amount_hint">Amount</string>
+    <string name="date_and_time_label">Date and time</string>
+    <string name="category_label">Category</string>
+    <string name="add_transaction_category">Add category</string>
+    <string name="required_field_label">* Required</string>
+    <string name="amount_zero_error">Can\'t be zero</string>
+    <string name="format_error">Unexpected format</string>
+    <string name="OK">OK</string>
+    <string name="insufficient_error_desc">Selected account has low balance for specified operation</string>
+    <string name="insufficient_error_title">Low balance</string>
+    <string name="category_name">Category name</string>
+    <string name="add_transaction_button">Add transaction</string>
 </resources>
