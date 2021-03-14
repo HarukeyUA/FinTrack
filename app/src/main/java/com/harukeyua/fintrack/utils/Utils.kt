@@ -1,12 +1,10 @@
 package com.harukeyua.fintrack
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.text.InputFilter
 import android.util.TypedValue
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
-import androidx.appcompat.content.res.AppCompatResources
 
 @ColorInt
 fun Context.getThemedColor(@AttrRes attribute: Int) =
@@ -30,7 +28,12 @@ fun getConvertedBalance(balance: Long): String {
     val balanceString = balance.toString()
     return if (balance == 0L)
         "0.00"
-    else
+    else if (balance < 100 && balance > -100) {
+        if (balance > 0)
+            "0.$balance"
+        else
+            "-0.${balance * -1}"
+    } else
         StringBuilder(balanceString).insert(balanceString.length - 2, ".").toString()
 }
 

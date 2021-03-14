@@ -30,10 +30,9 @@ class TransactionPagingAdapter :
                     locationText.text = item.transaction.location?.name?.trim()
                     var amount = getConvertedBalance(item.transaction.amount)
                     if (item.transaction.amount > 0) {
-                        amount = "+ $amount"
+                        amount = "+$amount"
                         operationText.setTextColor(root.context.getThemedColor(R.attr.colorTransactionGain))
                     } else {
-                        amount = amount.replace("-", "- ")
                         operationText.setTextColor(root.context.getThemedColor(R.attr.colorTransactionSpend))
                     }
                     operationText.text = amount
@@ -99,7 +98,7 @@ class TransactionPagingAdapter :
             newItem: TransactionListItem
         ): Boolean {
             return if (oldItem is TransactionListItem.Item && newItem is TransactionListItem.Item) {
-                oldItem.transaction.id == newItem.transaction.id
+                oldItem.transaction == newItem.transaction
             } else if (oldItem is TransactionListItem.Separator && newItem is TransactionListItem.Separator) {
                 oldItem.offsetDateTime == newItem.offsetDateTime
             } else {

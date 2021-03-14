@@ -24,6 +24,11 @@ class AccountListAdapter(val onAddClick: () -> Unit) :
             this.notifyItemChanged(0)
         }
 
+    fun getCurrentAccount(position: Int): Account? {
+        val account = getItem(position)
+        return if (account.id != -1 && account.id != -2) account else null
+    }
+
     override fun submitList(list: List<Account>?) {
         // Additional element serves as last "add" card and first "total" card
         val listWithFooter = list?.toMutableList().also {

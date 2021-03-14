@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
 import com.harukeyua.fintrack.viewmodels.OverviewViewModel
 import com.harukeyua.fintrack.adapters.AccountListAdapter
 import com.harukeyua.fintrack.adapters.TransactionPagingAdapter
@@ -57,6 +58,16 @@ class OverviewFragment : Fragment() {
             val action = OverviewFragmentDirections.actionOverviewFragmentToAddTransactionFragment()
             findNavController().navigate(action)
         }
+
+        binding.moneyStorePager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                val account = accountListAdapter.getCurrentAccount(position)
+                if (account == null)
+                    viewModel.showAllTransactions()
+                else
+                    viewModel.showTransactionsForStore(account)
+            }
+        })
 
         return binding.root
     }
