@@ -9,10 +9,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
-import com.harukeyua.fintrack.viewmodels.OverviewViewModel
 import com.harukeyua.fintrack.adapters.AccountListAdapter
 import com.harukeyua.fintrack.adapters.TransactionPagingAdapter
 import com.harukeyua.fintrack.databinding.OverviewFragmentBinding
+import com.harukeyua.fintrack.viewmodels.OverviewViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -52,14 +52,15 @@ class OverviewFragment : Fragment() {
 
         viewModel.showAllTransactions()
 
-        subscribe()
+        observe()
 
         binding.addTransactionButton.setOnClickListener {
             val action = OverviewFragmentDirections.actionOverviewFragmentToAddTransactionFragment()
             findNavController().navigate(action)
         }
 
-        binding.moneyStorePager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+        binding.moneyStorePager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 val account = accountListAdapter.getCurrentAccount(position)
                 if (account == null)
@@ -72,10 +73,13 @@ class OverviewFragment : Fragment() {
         return binding.root
     }
 
-    private fun subscribe() {
+    private fun observe() {
         viewModel.accountsList.observe(viewLifecycleOwner) { list ->
             accountListAdapter.submitList(list)
             viewModel.updateTotalBalance(list)
+
+            binding.addTransactionButton.visibility =
+                if (list.isNotEmpty()) View.VISIBLE else View.GONE
         }
 
         viewModel.transactionTypes.observe(viewLifecycleOwner) { list ->
