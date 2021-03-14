@@ -25,4 +25,8 @@
     <string name="insufficient_error_title">Low balance</string>
     <string name="category_name">Category name</string>
     <string name="add_transaction_button">Add transaction</string>
+    <string name="add_account_title">Add account</string>
+    <string name="account_name_hint">Account name</string>
+    <string name="account_type_hint">Account type</string>
+    <string name="account_balance_hint">Account balance</string>
 </resources>

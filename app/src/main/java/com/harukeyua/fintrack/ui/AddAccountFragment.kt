@@ -9,19 +9,21 @@ import android.widget.AutoCompleteTextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.harukeyua.fintrack.viewmodels.AddMoneyStoreViewModel
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.harukeyua.fintrack.R
 import com.harukeyua.fintrack.currencyInputFilter
 import com.harukeyua.fintrack.data.model.AccountType
-import com.harukeyua.fintrack.databinding.AddMoneyStoreFragmentBinding
+import com.harukeyua.fintrack.databinding.AddAccountFragmentBinding
+import com.harukeyua.fintrack.viewmodels.AddMoneyStoreViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class AddMoneyStoreFragment : Fragment() {
+class AddAccountFragment : Fragment() {
 
     private val viewModel: AddMoneyStoreViewModel by viewModels()
-    private var _binding: AddMoneyStoreFragmentBinding? = null
+    private var _binding: AddAccountFragmentBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -29,7 +31,10 @@ class AddMoneyStoreFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = AddMoneyStoreFragmentBinding.inflate(inflater, container, false)
+        _binding = AddAccountFragmentBinding.inflate(inflater, container, false)
+
+        val appBarConfiguration = AppBarConfiguration(findNavController().graph)
+        binding.topAppBar.setupWithNavController(findNavController(), appBarConfiguration)
 
         setupAutocompleteText()
         subscribe()
@@ -57,7 +62,7 @@ class AddMoneyStoreFragment : Fragment() {
         viewModel.navigateToOverview.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
                 val action =
-                    AddMoneyStoreFragmentDirections.actionAddMoneyStoreFragmentToOverviewFragment()
+                    AddAccountFragmentDirections.actionAddMoneyStoreFragmentToOverviewFragment()
                 findNavController().navigate(action)
             }
         }
@@ -66,17 +71,22 @@ class AddMoneyStoreFragment : Fragment() {
     private fun setupListeners() {
         binding.accountBalanceText.filters = listOf(currencyInputFilter).toTypedArray()
 
-        binding.addButton.setOnClickListener {
-            val accountName = binding.accountName.editText?.text.toString()
-            val accountType =
-                when ((binding.accountType.editText as AutoCompleteTextView).text.toString()) {
-                    resources.getString(R.string.account_type_card) -> AccountType.CARD
-                    resources.getString(R.string.account_type_wallet) -> AccountType.CASH
-                    else -> AccountType.CARD
-                }
-            val accountBalance = binding.accountBalanceText.text.toString()
-            viewModel.addAccount(accountName, accountType, accountBalance)
+        binding.topAppBar.setOnMenuItemClickListener { menuItem ->
+            if (menuItem.itemId == R.id.add_transaction) {
+                val accountName = binding.accountName.editText?.text.toString()
+                val accountType =
+                    when ((binding.accountType.editText as AutoCompleteTextView).text.toString()) {
+                        resources.getString(R.string.account_type_card) -> AccountType.CARD
+                        resources.getString(R.string.account_type_wallet) -> AccountType.CASH
+                        else -> AccountType.CARD
+                    }
+                val accountBalance = binding.accountBalanceText.text.toString()
+                viewModel.addAccount(accountName, accountType, accountBalance)
+                true
+            } else
+                false
         }
+
     }
 
     override fun onDestroyView() {

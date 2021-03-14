@@ -19,9 +19,9 @@
     </fragment>
     <fragment
         android:id="@+id/addMoneyStoreFragment"
-        android:name="com.harukeyua.fintrack.ui.AddMoneyStoreFragment"
-        android:label="add_money_store_fragment"
-        tools:layout="@layout/add_money_store_fragment" >
+        android:name="com.harukeyua.fintrack.ui.AddAccountFragment"
+        android:label="@string/add_account_title"
+        tools:layout="@layout/add_account_fragment" >
         <action
             android:id="@+id/action_addMoneyStoreFragment_to_overviewFragment"
             app:destination="@id/overviewFragment" />
