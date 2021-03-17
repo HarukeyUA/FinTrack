@@ -1,7 +1,7 @@
 package com.harukeyua.fintrack.data.model
 
-data class Location(
-    val lon: Float,
-    val lat: Float,
+data class LocationInfo(
+    val lon: Double,
+    val lat: Double,
     val name: String = ""
 )

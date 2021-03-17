@@ -50,11 +50,11 @@
                 android:hint="@string/transaction_description_hint"
                 app:counterEnabled="true"
                 app:counterMaxLength="20"
+                app:helperText="@string/required_field_label"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/accounts_list"
-                app:startIconDrawable="@drawable/ic_comment"
-                app:helperText="@string/required_field_label">
+                app:startIconDrawable="@drawable/ic_comment">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -104,12 +104,12 @@
                 android:layout_marginTop="@dimen/default_margin"
                 android:layout_marginEnd="@dimen/default_margin"
                 android:hint="@string/transaction_amount_hint"
+                app:helperText="* Required"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/toggle_transaction_type"
                 app:layout_constraintTop_toBottomOf="@id/transaction_description"
                 app:startIconDrawable="@drawable/ic_wallet"
-                app:suffixText="UAH"
-                app:helperText="* Required">
+                app:suffixText="UAH">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -193,14 +193,56 @@
             </com.google.android.material.chip.ChipGroup>
 
             <TextView
+                android:id="@+id/location_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/default_margin"
-                android:text="Location Placeholder"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="@dimen/default_margin"
+                android:text="@string/location_label"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/category_chips" />
+
+            <CheckBox
+                android:id="@+id/include_location_checkbox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_margin"
+                android:text="@string/include_location_info_checkbox"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/location_text" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/place_name"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_margin"
+                android:layout_marginEnd="@dimen/default_margin"
+                android:layout_marginBottom="@dimen/default_margin"
+                android:enabled="false"
+                android:hint="@string/place_name_hint"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/include_location_checkbox"
+                app:startIconDrawable="@drawable/ic_location">
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    tools:ignore="LabelFor" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="@dimen/default_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/place_name" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

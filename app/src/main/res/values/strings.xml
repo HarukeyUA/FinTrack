@@ -29,4 +29,10 @@
     <string name="account_name_hint">Account name</string>
     <string name="account_type_hint">Account type</string>
     <string name="account_balance_hint">Account balance</string>
+    <string name="pick">Pick</string>
+    <string name="pick_location_title">Pick location</string>
+    <string name="select_location_error">You must select location</string>
+    <string name="place_name_hint">Place name</string>
+    <string name="include_location_info_checkbox">Include location info</string>
+    <string name="location_label">Location</string>
 </resources>

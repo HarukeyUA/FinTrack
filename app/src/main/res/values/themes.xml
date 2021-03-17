@@ -12,6 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="colorAccent">@color/half_baked</item>
 
         <item name="colorMoneyStoreCard">@color/sunshade</item>
         <item name="colorMoneyStoreCash">@color/green_300</item>
@@ -66,5 +67,13 @@
         <item name="android:paddingRight">12dp</item>
         <item name="android:minWidth">48dp</item>
         <item name="android:minHeight">48dp</item>
+    </style>
+
+    <style name="AppTheme.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="colorPrimaryDark">@color/half_baked_dark</item>
+        <item name="colorPrimary">@color/half_baked</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="colorOnPrimary">@color/white</item>
     </style>
 </resources>

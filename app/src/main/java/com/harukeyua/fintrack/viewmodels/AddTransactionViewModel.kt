@@ -4,9 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.libraries.places.api.model.PlaceLikelihood
 import com.google.android.material.chip.Chip
 import com.harukeyua.fintrack.convertToPenny
 import com.harukeyua.fintrack.data.model.Account
+import com.harukeyua.fintrack.data.model.LocationInfo
 import com.harukeyua.fintrack.data.model.Transaction
 import com.harukeyua.fintrack.data.model.TransactionType
 import com.harukeyua.fintrack.repos.FinEditRepo
@@ -47,6 +50,22 @@ class AddTransactionViewModel @Inject constructor(
     private val _dbError = MutableLiveData<Event<String>>()
     val dbError: LiveData<Event<String>>
         get() = _dbError
+
+    private val _locationNameError = MutableLiveData<Event<Unit>>()
+    val locationNameError: LiveData<Event<Unit>>
+        get() = _locationNameError
+
+    private val _locationCoorsError = MutableLiveData<Event<Unit>>()
+    val locationCoorsError: LiveData<Event<Unit>>
+        get() = _locationCoorsError
+
+    private val _placesLikelihood = MutableLiveData<List<PlaceLikelihood>>()
+    val placesLikelihood: LiveData<List<PlaceLikelihood>>
+        get() = _placesLikelihood
+
+    private val _selectedLocation = MutableLiveData<LatLng>()
+    val selectedLocation: LiveData<LatLng>
+        get() = _selectedLocation
 
     var selectedDate: OffsetDateTime = OffsetDateTime.now()
         private set
@@ -95,7 +114,9 @@ class AddTransactionViewModel @Inject constructor(
         operation: Operation,
         amount: String,
         categoryId: Int,
-        account: Account?
+        account: Account?,
+        includeLocation: Boolean,
+        placeName: String
     ) {
         var isValid = true
         if (description.isEmpty()) {
@@ -107,6 +128,18 @@ class AddTransactionViewModel @Inject constructor(
         }
 
         var amountLong = convertUserAmountInput(amount)
+
+        if (includeLocation) {
+            if (placeName.isEmpty()) {
+                _locationNameError.value = Event(Unit)
+                isValid = false
+            }
+
+            if (selectedLocation.value == null) {
+                _locationCoorsError.value = Event(Unit)
+                isValid = false
+            }
+        }
 
         if (account == null || amountLong == null || !isValid) {
             return
@@ -129,13 +162,26 @@ class AddTransactionViewModel @Inject constructor(
             selectedDate.offset
         )
 
-        val transaction = Transaction(
-            transactionTypeId = categoryId,
-            accountId = account.id,
-            amount = amountLong,
-            dateTime = dateTime,
-            description = description
-        )
+        val transaction = if (!includeLocation)
+            Transaction(
+                transactionTypeId = categoryId,
+                accountId = account.id,
+                amount = amountLong,
+                dateTime = dateTime,
+                description = description
+            ) else
+            Transaction(
+                transactionTypeId = categoryId,
+                accountId = account.id,
+                amount = amountLong,
+                dateTime = dateTime,
+                description = description,
+                location = LocationInfo(
+                    selectedLocation.value!!.longitude,
+                    selectedLocation.value!!.latitude,
+                    placeName
+                )
+            )
 
         viewModelScope.launch {
             try {
@@ -147,5 +193,26 @@ class AddTransactionViewModel @Inject constructor(
             }
         }
 
+    }
+
+    fun setCurrentPlaces(list: List<PlaceLikelihood>) {
+        _placesLikelihood.value = list
+    }
+
+    fun setPointLocation(likelyPLaceIndex: Int) {
+        try {
+            val place = _placesLikelihood.value?.get(likelyPLaceIndex)
+            place?.let {
+                _selectedLocation.value = it.place.latLng
+            }
+        } catch (e: IndexOutOfBoundsException) {
+            e.printStackTrace()
+        }
+    }
+
+    fun setPointLocation(latLng: LatLng) {
+        _selectedLocation.value = latLng
+        // Manual location selection - clear suggestions
+        _placesLikelihood.value = listOf()
     }
 }

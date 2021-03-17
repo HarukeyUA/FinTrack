@@ -79,7 +79,7 @@ class FinDatabaseReadWriteTest {
         val transactionType = TransactionType(id = 1, name = "Test type")
         val moneyStore =
             Account(id = 1, name = "Test money store", type = AccountType.CARD, balance = 500)
-        val location = Location(lon = 1f, lat = 1f, "Test Shop")
+        val location = LocationInfo(lon = 1f, lat = 1f, "Test Shop")
         val dateTime = OffsetDateTime.parse(
             "2017-10-17T11:01:12.972-02:00",
             DateTimeFormatter.ISO_OFFSET_DATE_TIME
