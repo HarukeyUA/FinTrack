@@ -30,9 +30,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:lines="1"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
             android:textColor="?attr/colorOnPrimary"
-            app:layout_constraintEnd_toStartOf="@+id/store_name"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintEnd_toStartOf="@+id/money_store_icon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/balance_description"
             tools:text="5 000" />
@@ -57,11 +60,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/default_margin"
+            android:lines="1"
             android:textAlignment="textEnd"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
             android:textColor="?attr/colorOnPrimary"
+            app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/money_store_icon"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/money_store_icon"
             tools:text="Card" />
 

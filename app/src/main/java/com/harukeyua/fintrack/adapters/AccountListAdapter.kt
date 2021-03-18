@@ -1,7 +1,11 @@
 package com.harukeyua.fintrack.adapters
 
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.RelativeSizeSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.text.toSpannable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -62,7 +66,14 @@ class AccountListAdapter(val onAddClick: () -> Unit) :
 
         fun bind(balance: String?) {
             balance?.let {
-                binding.balanceAmount.text = balance
+                val spanned = SpannableStringBuilder(balance)
+                spanned.append(" ")
+                spanned.append(
+                    binding.root.context.getString(R.string.uah_label),
+                    RelativeSizeSpan(0.4f),
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                binding.balanceAmount.text = spanned.toSpannable()
             }
         }
     }
@@ -97,7 +108,14 @@ class AccountListAdapter(val onAddClick: () -> Unit) :
                 }
                 moneyStoreIcon.setImageResource(iconDrawable)
                 balanceDescription.setText(R.string.store_balance)
-                balanceAmount.text = item.getConvertedBalance()
+                val spanned = SpannableStringBuilder(item.getConvertedBalance())
+                spanned.append(" ")
+                spanned.append(
+                    binding.root.context.getString(R.string.uah_label),
+                    RelativeSizeSpan(0.4f),
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                balanceAmount.text = spanned.toSpannable()
                 storeName.text = item.name.trim()
             }
         }
