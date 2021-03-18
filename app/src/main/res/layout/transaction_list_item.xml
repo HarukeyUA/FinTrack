@@ -39,8 +39,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:clickable="true"
                 android:ellipsize="end"
+                android:focusable="true"
                 android:lines="1"
+                android:textColor="?attr/colorPrimary"
                 tools:text="Varus" />
 
         </LinearLayout>

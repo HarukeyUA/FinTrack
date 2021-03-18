@@ -1,17 +1,23 @@
 package com.harukeyua.fintrack.adapters
 
+import android.content.Intent
+import android.graphics.Paint
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.startActivity
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.harukeyua.fintrack.R
+import com.harukeyua.fintrack.data.model.LocationInfo
 import com.harukeyua.fintrack.data.model.TransactionListItem
 import com.harukeyua.fintrack.data.model.TransactionType
 import com.harukeyua.fintrack.databinding.TransactionListItemBinding
 import com.harukeyua.fintrack.databinding.TransactionListSeparatorBinding
 import com.harukeyua.fintrack.getConvertedBalance
 import com.harukeyua.fintrack.getThemedColor
+
 
 class TransactionPagingAdapter :
     PagingDataAdapter<TransactionListItem, RecyclerView.ViewHolder>(TransactionDiffCallback()) {
@@ -39,7 +45,25 @@ class TransactionPagingAdapter :
                     categoryText.text =
                         transactionTypes?.find { it.id == item.transaction.transactionTypeId }?.name
                             ?: ""
+                    locationText.paintFlags = locationText.paintFlags.or(Paint.UNDERLINE_TEXT_FLAG)
+                    locationText.setOnClickListener {
+                        item.transaction.location?.let {
+                            sendMapIntent(item.transaction.location)
+                        }
+
+                    }
                 }
+            }
+        }
+
+        private fun sendMapIntent(location: LocationInfo) {
+            val intent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("geo:<${location.lat}>,<${location.lon}>?q=<${location.lat}>,<${location.lon}>(${location.name})")
+            )
+            intent.setPackage("com.google.android.apps.maps")
+            intent.resolveActivity(binding.root.context.packageManager)?.let {
+                startActivity(binding.root.context, intent, null)
             }
         }
     }
