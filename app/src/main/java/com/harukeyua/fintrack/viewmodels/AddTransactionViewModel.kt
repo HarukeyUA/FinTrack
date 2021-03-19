@@ -161,14 +161,15 @@ class AddTransactionViewModel @Inject constructor(
             0,
             selectedDate.offset
         )
-
+        val resBalance = account.balance + amountLong
         val transaction = if (!includeLocation)
             Transaction(
                 transactionTypeId = categoryId,
                 accountId = account.id,
                 amount = amountLong,
                 dateTime = dateTime,
-                description = description
+                description = description,
+                balance = resBalance
             ) else
             Transaction(
                 transactionTypeId = categoryId,
@@ -180,13 +181,14 @@ class AddTransactionViewModel @Inject constructor(
                     selectedLocation.value!!.longitude,
                     selectedLocation.value!!.latitude,
                     placeName
-                )
+                ),
+                balance = resBalance
             )
 
         viewModelScope.launch {
             try {
                 finEditRepo.insertTransaction(transaction)
-                finEditRepo.updateAccount(account.copy(balance = account.balance + amountLong))
+                finEditRepo.updateAccount(account.copy(balance = resBalance))
             } catch (e: Exception) {
                 e.printStackTrace()
                 _dbError.value = Event(e.localizedMessage ?: e.toString())

@@ -27,5 +27,6 @@ data class Transaction(
     val amount: Long,
     @Embedded val location: LocationInfo? = null,
     val dateTime: OffsetDateTime,
-    val description: String = ""
+    val description: String = "",
+    val balance: Long
 )
