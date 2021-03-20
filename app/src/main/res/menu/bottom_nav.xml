@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/overview_nav_graph"
+        android:icon="@drawable/ic_credit_card"
+        android:title="@string/overview_nav" />
+    <item
+        android:id="@+id/stats_nav_graph"
+        android:icon="@drawable/ic_stats"
+        android:title="@string/stats_nav" />
+</menu>

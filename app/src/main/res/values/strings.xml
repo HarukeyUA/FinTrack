@@ -36,4 +36,6 @@
     <string name="include_location_info_checkbox">Include location info</string>
     <string name="location_label">Location</string>
     <string name="uah_label">UAH</string>
+    <string name="overview_nav">Overview</string>
+    <string name="stats_nav">Stats</string>
 </resources>
