@@ -5,6 +5,7 @@ import androidx.paging.PagingSource
 import androidx.room.*
 import com.harukeyua.fintrack.data.model.*
 import com.harukeyua.fintrack.data.model.Transaction
+import java.time.OffsetDateTime
 
 @Dao
 interface FinDao {
@@ -48,4 +49,16 @@ interface FinDao {
     @androidx.room.Transaction
     @Query("SELECT * FROM transactionTypes ORDER BY name ASC")
     fun getTransactionTypeWithTransactions(): LiveData<List<TransactionTypeWithTransactions>>
+
+    @Query("SELECT * FROM transactions WHERE dateTime(dateTime) BETWEEN dateTime(:startDate) AND dateTime(:endDate) ORDER By dateTime(dateTime)")
+    fun getTransactionsInDateRange(
+        startDate: OffsetDateTime,
+        endDate: OffsetDateTime
+    ): LiveData<List<Transaction>>
+
+    @Query("SELECT * FROM TransactionInfo WHERE dateTime(dateTime) BETWEEN dateTime(:startDate) AND dateTime(:endDate) ORDER By dateTime(dateTime)")
+    fun getTransactionsInfoInDateRange(
+        startDate: OffsetDateTime,
+        endDate: OffsetDateTime
+    ): LiveData<List<TransactionInfo>>
 }

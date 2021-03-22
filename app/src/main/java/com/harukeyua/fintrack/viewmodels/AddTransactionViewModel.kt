@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.PlaceLikelihood
 import com.google.android.material.chip.Chip
-import com.harukeyua.fintrack.convertToPenny
+import com.harukeyua.fintrack.utils.convertToPenny
 import com.harukeyua.fintrack.data.model.Account
 import com.harukeyua.fintrack.data.model.LocationInfo
 import com.harukeyua.fintrack.data.model.Transaction

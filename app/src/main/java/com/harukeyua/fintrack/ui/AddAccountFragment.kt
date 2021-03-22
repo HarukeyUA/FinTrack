@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.harukeyua.fintrack.R
-import com.harukeyua.fintrack.currencyInputFilter
+import com.harukeyua.fintrack.utils.currencyInputFilter
 import com.harukeyua.fintrack.data.model.AccountType
 import com.harukeyua.fintrack.databinding.AddAccountFragmentBinding
 import com.harukeyua.fintrack.viewmodels.AddMoneyStoreViewModel

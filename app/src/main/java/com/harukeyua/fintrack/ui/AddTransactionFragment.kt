@@ -38,7 +38,7 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.harukeyua.fintrack.R
 import com.harukeyua.fintrack.adapters.AccountListChooserAdapter
-import com.harukeyua.fintrack.currencyInputFilter
+import com.harukeyua.fintrack.utils.currencyInputFilter
 import com.harukeyua.fintrack.databinding.AddTransactionFragmentBinding
 import com.harukeyua.fintrack.utils.HorizontalMarginItemDecoration
 import com.harukeyua.fintrack.viewmodels.AddTransactionViewModel

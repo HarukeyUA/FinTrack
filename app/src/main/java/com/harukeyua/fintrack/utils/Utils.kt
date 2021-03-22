@@ -1,4 +1,4 @@
-package com.harukeyua.fintrack
+package com.harukeyua.fintrack.utils
 
 import android.content.Context
 import android.text.InputFilter
@@ -35,6 +35,13 @@ fun getConvertedBalance(balance: Long): String {
             "-0.${balance * -1}"
     } else
         StringBuilder(balanceString).insert(balanceString.length - 2, ".").toString()
+}
+
+fun getFloatBalance(balance: Long): Float? {
+    return if (balance >= 100 || balance <= -100)
+        balance.toString().dropLast(2).toFloatOrNull()
+    else
+        0f
 }
 
 fun convertToPenny(item: String): Long {

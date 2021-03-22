@@ -15,7 +15,7 @@ import com.harukeyua.fintrack.data.model.AccountType
 import com.harukeyua.fintrack.databinding.AddNewMoneyStoreItemBinding
 import com.harukeyua.fintrack.databinding.MoneyStoreCardItemBinding
 import com.harukeyua.fintrack.databinding.TotalBalanceCardBinding
-import com.harukeyua.fintrack.getThemedColor
+import com.harukeyua.fintrack.utils.getThemedColor
 
 class AccountListAdapter(val onAddClick: () -> Unit) :
     ListAdapter<Account, RecyclerView.ViewHolder>(AccountDiffCallback()) {

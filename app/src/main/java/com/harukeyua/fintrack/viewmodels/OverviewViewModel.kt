@@ -7,7 +7,7 @@ import com.harukeyua.fintrack.data.FinDao
 import com.harukeyua.fintrack.data.model.Account
 import com.harukeyua.fintrack.data.model.Transaction
 import com.harukeyua.fintrack.data.model.TransactionType
-import com.harukeyua.fintrack.getConvertedBalance
+import com.harukeyua.fintrack.utils.getConvertedBalance
 import com.harukeyua.fintrack.repos.FinInfoRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*

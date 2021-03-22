@@ -9,7 +9,7 @@ import com.harukeyua.fintrack.R
 import com.harukeyua.fintrack.data.model.Account
 import com.harukeyua.fintrack.data.model.AccountType
 import com.harukeyua.fintrack.databinding.AccountSmallCardBinding
-import com.harukeyua.fintrack.getThemedColor
+import com.harukeyua.fintrack.utils.getThemedColor
 
 class AccountListChooserAdapter :
     ListAdapter<Account, AccountListChooserAdapter.AccountViewHolder>(AccountDiffCallback()) {

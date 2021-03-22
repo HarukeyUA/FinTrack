@@ -38,4 +38,13 @@
     <string name="uah_label">UAH</string>
     <string name="overview_nav">Overview</string>
     <string name="stats_nav">Stats</string>
+    <string name="stats_summary">Summary</string>
+    <string name="stats_income_label">Income</string>
+    <string name="stats_expanses_label">Expenses</string>
+    <string name="stats_total_label">Total</string>
+    <string name="date_range_standard">%1$td/%1$tm/%1$tY — %2$td/%2$tm/%2$tY</string>
+    <string name="chart_date_axis_label">%1$td %1$tb</string>
+    <string name="total_balance_history_stats">Total balance history</string>
+    <string name="expenses_by_categories_chart">Expenses by categories</string>
+    <string name="income_by_categories_chart">Income by categories</string>
 </resources>

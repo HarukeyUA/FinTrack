@@ -1,12 +1,16 @@
 package com.harukeyua.fintrack.repos
 
+import androidx.lifecycle.LiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.insertSeparators
 import androidx.paging.map
 import com.harukeyua.fintrack.data.FinDao
+import com.harukeyua.fintrack.data.model.Transaction
+import com.harukeyua.fintrack.data.model.TransactionInfo
 import com.harukeyua.fintrack.data.model.TransactionListItem
 import kotlinx.coroutines.flow.map
+import java.time.OffsetDateTime
 import javax.inject.Inject
 
 class FinInfoRepo @Inject constructor(private val dao: FinDao) {
@@ -65,4 +69,18 @@ class FinInfoRepo @Inject constructor(private val dao: FinDao) {
     ) {
         dao.getTransactionsPaging()
     }.flow
+
+    fun getTransactionsInDateRange(range: Pair<OffsetDateTime, OffsetDateTime>): LiveData<List<Transaction>> {
+        return dao.getTransactionsInDateRange(
+            range.first,
+            range.second.plusDays(1).withHour(0).withMinute(0)
+        )
+    }
+
+    fun getTransactionsInfoInDateRange(range: Pair<OffsetDateTime, OffsetDateTime>): LiveData<List<TransactionInfo>> {
+        return dao.getTransactionsInfoInDateRange(
+            range.first,
+            range.second.plusDays(1).withHour(0).withMinute(0)
+        )
+    }
 }

@@ -15,8 +15,8 @@ import com.harukeyua.fintrack.data.model.TransactionListItem
 import com.harukeyua.fintrack.data.model.TransactionType
 import com.harukeyua.fintrack.databinding.TransactionListItemBinding
 import com.harukeyua.fintrack.databinding.TransactionListSeparatorBinding
-import com.harukeyua.fintrack.getConvertedBalance
-import com.harukeyua.fintrack.getThemedColor
+import com.harukeyua.fintrack.utils.getConvertedBalance
+import com.harukeyua.fintrack.utils.getThemedColor
 
 
 class TransactionPagingAdapter :
