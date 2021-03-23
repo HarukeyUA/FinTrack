@@ -47,4 +47,7 @@
     <string name="total_balance_history_stats">Total balance history</string>
     <string name="expenses_by_categories_chart">Expenses by categories</string>
     <string name="income_by_categories_chart">Income by categories</string>
+    <string name="map_transaction_marker">%1$s, amount: %2$s UAH</string>
+    <string name="on_map_nav">On map</string>
+    <string name="last_month_transactions">Last month transactions</string>
 </resources>

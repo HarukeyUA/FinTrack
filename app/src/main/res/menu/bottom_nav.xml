@@ -8,4 +8,8 @@
         android:id="@+id/stats_nav_graph"
         android:icon="@drawable/ic_stats"
         android:title="@string/stats_nav" />
+    <item
+        android:id="@+id/transaction_on_map_nav_graph"
+        android:icon="@drawable/ic_map"
+        android:title="@string/on_map_nav" />
 </menu>

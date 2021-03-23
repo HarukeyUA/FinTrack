@@ -74,6 +74,11 @@ dependencies {
     implementation "com.github.PhilJay:MPAndroidChart:$mpachart_version"
 
     // Location services
+    // KTX for the Maps SDK for Android library
+    implementation 'com.google.maps.android:maps-ktx:3.0.0'
+
+    // KTX for the Maps SDK for Android Utility Library
+    implementation 'com.google.maps.android:maps-utils-ktx:3.0.0'
     implementation "com.google.android.gms:play-services-location:$gmsLocation_version"
     implementation "com.google.android.gms:play-services-maps:$maps_version"
     implementation "com.google.android.libraries.places:places:$places_version"
