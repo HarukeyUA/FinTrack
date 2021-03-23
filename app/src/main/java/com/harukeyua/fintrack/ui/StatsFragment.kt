@@ -66,7 +66,7 @@ class StatsFragment : Fragment() {
             axisLeft.setLabelCount(4, false)
             axisLeft.setDrawAxisLine(false)
             legend.isEnabled = false
-            animateY(1400, Easing.EaseInOutQuad)
+            animateY(1000, Easing.EaseInOutQuad)
             xAxis.setDrawAxisLine(false)
             xAxis.position = XAxis.XAxisPosition.BOTTOM
             xAxis.setLabelCount(4, false)
@@ -161,6 +161,7 @@ class StatsFragment : Fragment() {
                     setl.values = list
                     binding.chart.data.notifyDataChanged()
                     binding.chart.notifyDataSetChanged()
+                    binding.chart.invalidate()
                 } else {
                     val setl = LineDataSet(list, "1")
 
@@ -204,7 +205,11 @@ class StatsFragment : Fragment() {
 
             dataSet.setDrawIcons(false)
             dataSet.sliceSpace = 3f
-            dataSet.colors = ColorTemplate.JOYFUL_COLORS.toList()
+            val colors = ColorTemplate.JOYFUL_COLORS.toMutableList()
+            colors.addAll(ColorTemplate.MATERIAL_COLORS.toList())
+            colors.addAll(ColorTemplate.COLORFUL_COLORS.toList())
+            colors.addAll(ColorTemplate.PASTEL_COLORS.toList())
+            dataSet.colors = colors
             val data = PieData(dataSet)
             data.setValueFormatter(PercentFormatter(binding.pieChartExpenses))
             data.setValueTextSize(14f)
@@ -217,7 +222,11 @@ class StatsFragment : Fragment() {
 
             dataSet.setDrawIcons(false)
             dataSet.sliceSpace = 3f
-            dataSet.colors = ColorTemplate.JOYFUL_COLORS.toList()
+            val colors = ColorTemplate.JOYFUL_COLORS.toMutableList()
+            colors.addAll(ColorTemplate.MATERIAL_COLORS.toList())
+            colors.addAll(ColorTemplate.COLORFUL_COLORS.toList())
+            colors.addAll(ColorTemplate.PASTEL_COLORS.toList())
+            dataSet.colors = colors
             val data = PieData(dataSet)
             data.setValueFormatter(PercentFormatter(binding.pieChartIncome))
             data.setValueTextSize(14f)
