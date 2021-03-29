@@ -28,5 +28,6 @@ data class Transaction(
     @Embedded val location: LocationInfo? = null,
     val dateTime: OffsetDateTime,
     val description: String = "",
-    val balance: Long
+    val balance: Long,
+    val monoId: String = ""
 )

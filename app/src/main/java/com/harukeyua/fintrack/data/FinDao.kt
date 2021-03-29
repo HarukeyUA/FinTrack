@@ -15,8 +15,14 @@ interface FinDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAccount(account: Account)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAccounts(account: List<Account>)
+
     @Update(onConflict = OnConflictStrategy.ABORT)
     suspend fun updateAccount(account: Account)
+
+    @Update(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun updateAccounts(accounts: List<Account>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTransaction(transaction: Transaction)
@@ -61,4 +67,10 @@ interface FinDao {
         startDate: OffsetDateTime,
         endDate: OffsetDateTime
     ): LiveData<List<TransactionInfo>>
+
+    @Query("DELETE FROM accounts WHERE type = \"MONO\"")
+    suspend fun deleteMonoAccounts()
+
+    @Query("SELECT * FROM accounts WHERE type = \"MONO\" ORDER BY name ASC")
+    fun getMonoAccountsList(): List<Account>
 }

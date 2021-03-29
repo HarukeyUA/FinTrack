@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/transactions_sync_nav_graph"
+    app:startDestination="@id/transactionsSyncFragment">
+
+    <fragment
+        android:id="@+id/transactionsSyncFragment"
+        android:name="com.harukeyua.fintrack.ui.TransactionsSyncFragment"
+        android:label="TransactionsSyncFragment" />
+</navigation>

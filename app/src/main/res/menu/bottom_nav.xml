@@ -12,4 +12,8 @@
         android:id="@+id/transaction_on_map_nav_graph"
         android:icon="@drawable/ic_map"
         android:title="@string/on_map_nav" />
+    <item
+        android:id="@+id/transactions_sync_nav_graph"
+        android:icon="@drawable/ic_map"
+        android:title="Sync" />
 </menu>

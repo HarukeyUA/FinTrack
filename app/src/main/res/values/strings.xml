@@ -50,4 +50,18 @@
     <string name="map_transaction_marker">%1$s, amount: %2$s UAH</string>
     <string name="on_map_nav">On map</string>
     <string name="last_month_transactions">Last month transactions</string>
+    <string name="key_length_error">Key must be 44 characters long</string>
+    <string name="mono_account_error_403">Unknown key. Verify your key and try again</string>
+    <string name="mono_account_error_429">Too many requests. Try again in few minutes</string>
+    <string name="mono_account_error">An error occurred, try again later</string>
+    <string name="io_error_text">An error occurred, check your internet connection.\n%1$s</string>
+    <string name="success">Success</string>
+    <string name="unknown_label">Unknown</string>
+    <string name="mono_account_holder">Monobank account holder: %1$s</string>
+    <string name="missing_label">Token status: Missing</string>
+    <string name="token_ok_label">Token status: OK</string>
+    <string name="set_token_button">Set token</string>
+    <string name="personal_token_hint">Personal token</string>
+    <string name="mono_token_explanation">1) Acquire personal key at https://api.monobank.ua\n2) Paste it in the following field</string>
+    <string name="monobank_sync_status">Monobank sync status</string>
 </resources>
