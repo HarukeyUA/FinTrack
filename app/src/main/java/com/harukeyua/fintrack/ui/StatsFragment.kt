@@ -86,6 +86,7 @@ class StatsFragment : Fragment() {
             description.isEnabled = false
             animateY(1400, Easing.EaseInOutQuad)
             setDrawEntryLabels(false)
+            extraRightOffset = 40f
             legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
             legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
             legend.setDrawInside(false)
@@ -99,6 +100,7 @@ class StatsFragment : Fragment() {
             description.isEnabled = false
             animateY(1400, Easing.EaseInOutQuad)
             setDrawEntryLabels(false)
+            extraRightOffset = 40f
             legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
             legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
             legend.setDrawInside(false)
