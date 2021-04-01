@@ -29,7 +29,13 @@ class AddTransactionViewModel @Inject constructor(
     val accountsList =
         finInfoRepo.accountsList.map { accountsList -> accountsList.filter { it.type != AccountType.MONO } }
 
-    val transactionTypes = finInfoRepo.typesList
+    val transactionTypes = finInfoRepo.typesList.map { types ->
+        types.distinctBy {
+            it.name.toLowerCase(
+                Locale.getDefault()
+            )
+        }
+    }
 
     private val _descriptionErrorEvent = MutableLiveData<Event<Unit>>()
     val descriptionErrorEvent: LiveData<Event<Unit>>
