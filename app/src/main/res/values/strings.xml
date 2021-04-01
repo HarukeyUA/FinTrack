@@ -64,4 +64,11 @@
     <string name="personal_token_hint">Personal token</string>
     <string name="mono_token_explanation">1) Acquire personal key at https://api.monobank.ua\n2) Paste it in the following field</string>
     <string name="monobank_sync_status">Monobank sync status</string>
+    <string name="sync_notif_channel_name">Monobank sync notifications</string>
+    <string name="sync_notif_channel_description">Notifications related to data sync feature</string>
+    <string name="last_successful_sync_text">Last successful sync: %1$td %1$tb %1$tH:%1$tM</string>
+    <string name="last_failed_sync_text">Last failed sync: %1$td %1$tb %1$tH:%1$tM</string>
+    <string name="last_successful_sync_never_text">Last sync: never</string>
+    <string name="sync_fail_notification_title">Sync failed</string>
+    <string name="sync_fail_notification_body">Invalid monobank token</string>
 </resources>

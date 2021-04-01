@@ -66,7 +66,8 @@ class MonobankApiRepo @Inject constructor(
                     name = it.type,
                     type = AccountType.MONO,
                     balance = it.balance,
-                    monoCardType = it.type
+                    monoCardType = it.type,
+                    monoId = it.id
                 )
             })
         }
@@ -84,7 +85,8 @@ class MonobankApiRepo @Inject constructor(
                     name = it.type,
                     type = AccountType.MONO,
                     balance = it.balance,
-                    monoCardType = it.type
+                    monoCardType = it.type,
+                    monoId = it.id
                 )
             })
 

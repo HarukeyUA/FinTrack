@@ -72,5 +72,17 @@ interface FinDao {
     suspend fun deleteMonoAccounts()
 
     @Query("SELECT * FROM accounts WHERE type = \"MONO\" ORDER BY name ASC")
-    fun getMonoAccountsList(): List<Account>
+    suspend fun getMonoAccountsList(): List<Account>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertSyncInfo(item: SyncInfo)
+
+    @Query("SELECT * FROM SyncInfo ORDER BY id DESC")
+    fun getLatestSyncInfo(): LiveData<List<SyncInfo>>
+
+    @Query("SELECT * FROM SyncInfo ORDER BY id DESC")
+    suspend fun getLatestSyncInfoList(): List<SyncInfo>
+
+    @Query("SELECT * FROM transactionTypes WHERE NOT mccCode = -1")
+    suspend fun getMccTransactionTypesList(): List<TransactionType>
 }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -20,7 +19,7 @@
         android:id="@+id/sync_status_image"
         android:layout_width="85dp"
         android:layout_height="85dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="@dimen/default_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_sync"
@@ -43,11 +42,12 @@
         android:id="@+id/set_key_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginTop="@dimen/margin_medium"
         android:text="@string/set_token_button"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/sync_status_image"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/barrier"
-        android:layout_marginTop="@dimen/margin_medium"/>
+        app:layout_constraintTop_toBottomOf="@+id/account_holder_name" />
 
     <TextView
         android:id="@+id/account_holder_name"
@@ -58,7 +58,7 @@
         android:layout_marginEnd="@dimen/margin_medium"
         android:text="@string/unknown_label"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-        app:layout_constraintBottom_toBottomOf="@+id/sync_status_image"
+        app:layout_constraintBottom_toTopOf="@+id/set_key_button"
         app:layout_constraintEnd_toStartOf="@+id/sync_status_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mono_key_status" />
@@ -68,6 +68,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="account_holder_name, sync_status_image"/>
+        app:constraint_referenced_ids="set_key_button, sync_status_image" />
+
+    <TextView
+        android:id="@+id/last_sync_status_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginTop="@dimen/default_margin"
+        android:text="Last successful sync: never"
+        app:layout_constraintBottom_toBottomOf="@+id/mono_start_sync_button"
+        app:layout_constraintEnd_toStartOf="@+id/mono_start_sync_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrier" />
+
+    <Button
+        android:id="@+id/mono_start_sync_button"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:text="Sync now"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrier" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

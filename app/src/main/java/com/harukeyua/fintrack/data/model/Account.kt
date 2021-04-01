@@ -9,7 +9,8 @@ data class Account(
     val name: String,
     val type: AccountType,
     val balance: Long,
-    val monoCardType: String? = null
+    val monoCardType: String? = null,
+    val monoId: String? = null
 ) {
     fun getConvertedBalance(): String {
         val balanceString = balance.toString()

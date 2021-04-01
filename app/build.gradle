@@ -72,6 +72,7 @@ dependencies {
     def mpachart_version = "v3.1.0"
     def crypto_version = "1.1.0-alpha03"
     def logging_interceptor_version = "5.0.0-alpha.2"
+    def hilt_worker_version = "1.0.0-beta01"
 
     implementation "com.github.PhilJay:MPAndroidChart:$mpachart_version"
 
@@ -128,6 +129,7 @@ dependencies {
     // Hilt di
     implementation "com.google.dagger:hilt-android:$hilt_version"
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hiltViewModel_version"
+    implementation "androidx.hilt:hilt-work:$hilt_worker_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
     kapt "androidx.hilt:hilt-compiler:$hiltViewModel_version"
 
