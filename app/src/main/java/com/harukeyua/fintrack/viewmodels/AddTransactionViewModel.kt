@@ -1,23 +1,18 @@
 package com.harukeyua.fintrack.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.PlaceLikelihood
 import com.google.android.material.chip.Chip
-import com.harukeyua.fintrack.utils.convertToPenny
-import com.harukeyua.fintrack.data.model.Account
-import com.harukeyua.fintrack.data.model.LocationInfo
-import com.harukeyua.fintrack.data.model.Transaction
-import com.harukeyua.fintrack.data.model.TransactionType
+import com.harukeyua.fintrack.data.model.*
 import com.harukeyua.fintrack.repos.FinEditRepo
 import com.harukeyua.fintrack.repos.FinInfoRepo
 import com.harukeyua.fintrack.utils.Event
+import com.harukeyua.fintrack.utils.convertToPenny
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.OffsetDateTime
+import java.util.*
 import javax.inject.Inject
 
 enum class Operation { ADD, REMOVE }
@@ -31,7 +26,8 @@ class AddTransactionViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    val accountsList = finInfoRepo.accountsList
+    val accountsList =
+        finInfoRepo.accountsList.map { accountsList -> accountsList.filter { it.type != AccountType.MONO } }
 
     val transactionTypes = finInfoRepo.typesList
 
