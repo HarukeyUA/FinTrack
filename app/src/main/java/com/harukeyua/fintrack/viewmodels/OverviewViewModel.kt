@@ -3,22 +3,19 @@ package com.harukeyua.fintrack.viewmodels
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.harukeyua.fintrack.data.FinDao
 import com.harukeyua.fintrack.data.model.Account
-import com.harukeyua.fintrack.data.model.Transaction
-import com.harukeyua.fintrack.data.model.TransactionType
-import com.harukeyua.fintrack.utils.getConvertedBalance
 import com.harukeyua.fintrack.repos.FinInfoRepo
+import com.harukeyua.fintrack.utils.getConvertedBalance
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
 class OverviewViewModel @Inject constructor(
-    private val finInfoRepo: FinInfoRepo,
-    private val dao: FinDao
+    private val finInfoRepo: FinInfoRepo
 ) : ViewModel() {
 
     private val _selectedMoneyStore = MutableLiveData<Account?>()
@@ -30,31 +27,6 @@ class OverviewViewModel @Inject constructor(
     private val _totalBalance = MutableLiveData<String>()
     val totalBalance: LiveData<String>
         get() = _totalBalance
-
-
-    fun insert(transaction: Transaction) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                dao.insertTransaction(transaction)
-            }
-        }
-    }
-
-    fun insertType(type: TransactionType) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                dao.insertTransactionType(type)
-            }
-        }
-    }
-
-    fun insertMoneyStore(store: Account) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                dao.insertAccount(store)
-            }
-        }
-    }
 
     private val clearListCh = Channel<Unit>(Channel.CONFLATED)
 
