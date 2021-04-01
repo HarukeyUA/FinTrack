@@ -110,5 +110,6 @@ class MonoSyncWorker @AssistedInject constructor(
 
     companion object {
         const val RESULT_KEY = "sync_result"
+        const val RETRY_DATA_KEY = "RETRY"
     }
 }

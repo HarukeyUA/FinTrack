@@ -1,11 +1,13 @@
 package com.harukeyua.fintrack.ui
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.work.*
@@ -13,12 +15,15 @@ import com.harukeyua.fintrack.R
 import com.harukeyua.fintrack.databinding.TransactionsSyncFragmentBinding
 import com.harukeyua.fintrack.utils.MONOBANK_KEY_PREF
 import com.harukeyua.fintrack.utils.MONOBANK_NAME_PREF
+import com.harukeyua.fintrack.utils.PREFS_NAME
 import com.harukeyua.fintrack.utils.getThemedColor
 import com.harukeyua.fintrack.viewmodels.TransactionSyncViewModel
-import com.harukeyua.fintrack.workers.SyncFailures
 import com.harukeyua.fintrack.workers.MonoSyncWorker
 import com.harukeyua.fintrack.workers.MonoSyncWorker.Companion.RESULT_KEY
+import com.harukeyua.fintrack.workers.MonoSyncWorker.Companion.RETRY_DATA_KEY
+import com.harukeyua.fintrack.workers.SyncFailures
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -29,6 +34,8 @@ class TransactionsSyncFragment : Fragment() {
 
     private val viewModel: TransactionSyncViewModel by viewModels()
 
+    private lateinit var workManager: WorkManager
+
     @Inject
     lateinit var encryptedSharedPreferences: SharedPreferences
 
@@ -38,6 +45,7 @@ class TransactionsSyncFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = TransactionsSyncFragmentBinding.inflate(inflater, container, false)
+        workManager = WorkManager.getInstance(requireContext())
         return binding.root
     }
 
@@ -48,11 +56,39 @@ class TransactionsSyncFragment : Fragment() {
         }
         binding.monoStartSyncButton.setOnClickListener {
             val workRequest = OneTimeWorkRequest.Builder(MonoSyncWorker::class.java)
-            val data = Data.Builder()
-            data.putBoolean("RETRY", false)
-            workRequest.setInputData(data.build())
-            WorkManager.getInstance(requireContext())
-                .enqueueUniqueWork(SYNC_WORKER_ID, ExistingWorkPolicy.KEEP, workRequest.build())
+                .setInputData(workDataOf(RETRY_DATA_KEY to false))
+            workManager.enqueueUniqueWork(
+                SYNC_WORKER_ID,
+                ExistingWorkPolicy.KEEP,
+                workRequest.build()
+            )
+        }
+        binding.monoPeriodicSyncCheck.isChecked =
+            requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .getBoolean(PERIODIC_SYNC_PREF_KEY, false)
+
+        binding.monoPeriodicSyncCheck.setOnCheckedChangeListener { _, isChecked ->
+            requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .edit(commit = true) {
+                    putBoolean(PERIODIC_SYNC_PREF_KEY, isChecked)
+                }
+            if (isChecked) {
+                val workRequest = PeriodicWorkRequestBuilder<MonoSyncWorker>(12, TimeUnit.HOURS)
+                    .setConstraints(
+                        Constraints.Builder()
+                            .setRequiredNetworkType(NetworkType.CONNECTED).build()
+                    )
+                    .addTag("sync")
+                    .setInputData(workDataOf(RETRY_DATA_KEY to true))
+                    .build()
+                workManager.enqueueUniquePeriodicWork(
+                    PERIODIC_SYNC_WORKER_ID,
+                    ExistingPeriodicWorkPolicy.KEEP,
+                    workRequest
+                )
+            } else {
+                workManager.cancelUniqueWork(PERIODIC_SYNC_WORKER_ID)
+            }
         }
         observe()
     }
@@ -79,7 +115,7 @@ class TransactionsSyncFragment : Fragment() {
             }
         }
 
-        WorkManager.getInstance(requireContext()).getWorkInfosForUniqueWorkLiveData(SYNC_WORKER_ID)
+        workManager.getWorkInfosForUniqueWorkLiveData(SYNC_WORKER_ID)
             .observe(viewLifecycleOwner) { work ->
                 if (work.isNotEmpty()) {
                     when (work.first().state) {
@@ -129,6 +165,8 @@ class TransactionsSyncFragment : Fragment() {
 
     companion object {
         const val SYNC_WORKER_ID = "SYNC_SINGLE_WORKER"
+        const val PERIODIC_SYNC_WORKER_ID = "PERIODIC_SYNC"
+        const val PERIODIC_SYNC_PREF_KEY = "PERIODIC_SYNC_PREF"
     }
 
 }

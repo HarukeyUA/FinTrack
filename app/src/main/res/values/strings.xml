@@ -3,8 +3,6 @@
     <string name="date_separator_text">%1$td %1$tb, %1$tY</string>
     <string name="store_balance">Balance</string>
     <string name="total_balance">Total Balance</string>
-    <string name="balance_amount">%.2f</string>
-    <string name="transaction_amount">%.+2f</string>
     <string name="account_type_card">Card</string>
     <string name="account_type_wallet">Wallet</string>
     <string name="account_name_error">Account name is required</string>
