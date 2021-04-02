@@ -69,4 +69,5 @@
     <string name="last_successful_sync_never_text">Last sync: never</string>
     <string name="sync_fail_notification_title">Sync failed</string>
     <string name="sync_fail_notification_body">Invalid monobank token</string>
+    <string name="sync_nav">Sync</string>
 </resources>
