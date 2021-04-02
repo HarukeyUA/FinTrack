@@ -37,24 +37,20 @@ class StatsViewModel @Inject constructor(repo: FinInfoRepo) : ViewModel() {
         list.filter { it.amount < 0 }.sumOf { it.amount }
     }
 
-    val accountsBalanceChartData = Transformations.map(transactionsInDateRange) { list ->
-        val grouped = list.groupBy { it.dateTime.dayOfYear }.map { it.value.last() }
-
-        grouped.map { Entry(it.dateTime.dayOfYear.toFloat(), getFloatBalance(it.balance) ?: 0f) }
-    }
-
     val transactionsInfoInDateRange = Transformations.switchMap(selectedDateRange) { pair ->
         repo.getTransactionsInfoInDateRange(pair)
     }
 
-    val transactionsExpensesTypeChartData = Transformations.map(transactionsInfoInDateRange) { list ->
-        list.filter { it.amount < 0 }.groupBy { it.transactionTypeName }.map {
-            PieEntry(
-                getFloatBalance(it.value.sumOf { transaction -> abs(transaction.amount) }) ?: 0f,
-                it.key
-            )
+    val transactionsExpensesTypeChartData =
+        Transformations.map(transactionsInfoInDateRange) { list ->
+            list.filter { it.amount < 0 }.groupBy { it.transactionTypeName }.map {
+                PieEntry(
+                    getFloatBalance(it.value.sumOf { transaction -> abs(transaction.amount) })
+                        ?: 0f,
+                    it.key
+                )
+            }
         }
-    }
 
     val transactionsIncomeTypeChartData = Transformations.map(transactionsInfoInDateRange) { list ->
         list.filter { it.amount > 0 }.groupBy { it.transactionTypeName }.map {

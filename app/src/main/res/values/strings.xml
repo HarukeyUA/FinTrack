@@ -70,4 +70,6 @@
     <string name="sync_fail_notification_title">Sync failed</string>
     <string name="sync_fail_notification_body">Invalid monobank token</string>
     <string name="sync_nav">Sync</string>
+    <string name="view_balance_history_button">View balance history</string>
+    <string name="balance_history_title">Balance history</string>
 </resources>

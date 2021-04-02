@@ -6,16 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.github.mikephil.charting.animation.Easing
-import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.formatter.PercentFormatter
-import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.harukeyua.fintrack.R
@@ -50,37 +46,21 @@ class StatsFragment : Fragment() {
         binding.dateRangePickButton.setOnClickListener {
             showDatePicker()
         }
+        binding.balanceHistoryButton.setOnClickListener {
+            viewModel.selectedDateRange.value?.let {
+                val action = StatsFragmentDirections.actionStatsFragmentToAccountsChartsFragment(
+                    it.first.toEpochSecond(),
+                    it.second.toEpochSecond()
+                )
+                findNavController().navigate(action)
+            }
+
+        }
         setupChart()
         observe()
     }
 
     private fun setupChart() {
-        with(binding.chart) {
-            description.isEnabled = false
-            setTouchEnabled(false)
-            isDragEnabled = false
-            setScaleEnabled(false)
-            setPinchZoom(false)
-            setDrawGridBackground(false)
-            axisRight.isEnabled = false
-            axisLeft.setLabelCount(4, false)
-            axisLeft.setDrawAxisLine(false)
-            legend.isEnabled = false
-            animateY(1000, Easing.EaseInOutQuad)
-            xAxis.setDrawAxisLine(false)
-            xAxis.position = XAxis.XAxisPosition.BOTTOM
-            xAxis.setLabelCount(4, false)
-            xAxis.valueFormatter = object : ValueFormatter() {
-                override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-                    return getString(
-                        R.string.chart_date_axis_label,
-                        OffsetDateTime.now().withDayOfYear(value.toInt())
-                    )
-                }
-            }
-            invalidate()
-        }
-
         with(binding.pieChartExpenses) {
             setUsePercentValues(true)
             description.isEnabled = false
@@ -153,34 +133,6 @@ class StatsFragment : Fragment() {
         viewModel.totalExpensesTransactions.observe(viewLifecycleOwner) { amount ->
             amount?.let {
                 binding.expensesText.text = getConvertedBalance(amount)
-            }
-        }
-
-        viewModel.accountsBalanceChartData.observe(viewLifecycleOwner) { list ->
-            list?.let {
-                if (binding.chart.data != null && binding.chart.data.dataSetCount > 0) {
-                    val setl = binding.chart.data.getDataSetByIndex(0) as LineDataSet
-                    setl.values = list
-                    binding.chart.data.notifyDataChanged()
-                    binding.chart.notifyDataSetChanged()
-                    binding.chart.invalidate()
-                } else {
-                    val setl = LineDataSet(list, "1")
-
-                    with(setl) {
-                        mode = LineDataSet.Mode.CUBIC_BEZIER
-                        cubicIntensity = 0.15f
-                        setDrawCircles(false)
-                        lineWidth = 4f
-                        setDrawHighlightIndicators(false)
-                        color = requireContext().getThemedColor(R.attr.colorPrimary)
-                    }
-
-                    val data = LineData(setl)
-                    data.setDrawValues(false)
-                    binding.chart.data = data
-
-                }
             }
         }
 

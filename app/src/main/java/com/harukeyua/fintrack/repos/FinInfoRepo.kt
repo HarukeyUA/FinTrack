@@ -6,6 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.insertSeparators
 import androidx.paging.map
 import com.harukeyua.fintrack.data.FinDao
+import com.harukeyua.fintrack.data.model.Account
 import com.harukeyua.fintrack.data.model.Transaction
 import com.harukeyua.fintrack.data.model.TransactionInfo
 import com.harukeyua.fintrack.data.model.TransactionListItem
@@ -82,5 +83,13 @@ class FinInfoRepo @Inject constructor(private val dao: FinDao) {
             range.first,
             range.second.plusDays(1).withHour(0).withMinute(0)
         )
+    }
+
+    suspend fun getAccountsList(): List<Account> {
+        return dao.getAccountsList()
+    }
+
+    suspend fun getTransactionsListInDateRange(range: Pair<OffsetDateTime, OffsetDateTime>): List<Transaction> {
+        return dao.getTransactionsListInDateRange(range.first, range.second)
     }
 }

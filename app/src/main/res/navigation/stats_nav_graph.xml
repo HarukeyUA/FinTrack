@@ -6,5 +6,23 @@
     <fragment
         android:id="@+id/statsFragment"
         android:name="com.harukeyua.fintrack.ui.StatsFragment"
-        android:label="StatsFragment" />
+        android:label="StatsFragment" >
+        <action
+            android:id="@+id/action_statsFragment_to_accountsChartsFragment"
+            app:destination="@id/accountsChartsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/accountsChartsFragment"
+        android:name="com.harukeyua.fintrack.ui.AccountsChartsFragment"
+        android:label="@string/balance_history_title" >
+        <action
+            android:id="@+id/action_accountsChartsFragment_to_statsFragment"
+            app:destination="@id/statsFragment" />
+        <argument
+            android:name="fromDateTimeStamp"
+            app:argType="long" />
+        <argument
+            android:name="toDateTimeStamp"
+            app:argType="long" />
+    </fragment>
 </navigation>

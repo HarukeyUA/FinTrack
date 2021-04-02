@@ -48,6 +48,9 @@ interface FinDao {
     @Query("SELECT * FROM accounts ORDER BY name ASC")
     fun getAccounts(): LiveData<List<Account>>
 
+    @Query("SELECT * FROM accounts ORDER BY name ASC")
+    suspend fun getAccountsList(): List<Account>
+
     @androidx.room.Transaction
     @Query("SELECT * FROM accounts ORDER BY name ASC")
     fun getAccountWithTransactions(): LiveData<List<AccountWithTransactions>>
@@ -67,6 +70,12 @@ interface FinDao {
         startDate: OffsetDateTime,
         endDate: OffsetDateTime
     ): LiveData<List<TransactionInfo>>
+
+    @Query("SELECT * FROM transactions WHERE dateTime(dateTime) BETWEEN dateTime(:startDate) AND dateTime(:endDate) ORDER By dateTime(dateTime)")
+    suspend fun getTransactionsListInDateRange(
+        startDate: OffsetDateTime,
+        endDate: OffsetDateTime
+    ): List<Transaction>
 
     @Query("DELETE FROM accounts WHERE type = \"MONO\"")
     suspend fun deleteMonoAccounts()
