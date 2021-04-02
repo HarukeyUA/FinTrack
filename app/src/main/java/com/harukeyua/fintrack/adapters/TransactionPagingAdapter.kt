@@ -90,10 +90,12 @@ class TransactionPagingAdapter :
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is TransactionViewHolder)
-            holder.bind(getItem(position) as TransactionListItem.Item)
-        else if (holder is SeparatorViewHolder)
-            holder.bind(getItem(position) as TransactionListItem.Separator)
+        getItem(position)?.let {
+            if (holder is TransactionViewHolder)
+                holder.bind(getItem(position) as TransactionListItem.Item)
+            else if (holder is SeparatorViewHolder)
+                holder.bind(getItem(position) as TransactionListItem.Separator)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
