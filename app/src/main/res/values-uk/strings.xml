@@ -12,7 +12,7 @@
     <string name="account_name_error">Ім\'я рахунку є обов\'язковим</string>
     <string name="transaction_description_hint">Опис</string>
     <string name="add_transaction_menu_item">Додати</string>
-    <string name="transaction_amount_hint">Кількість</string>
+    <string name="transaction_amount_hint">Сума</string>
     <string name="date_and_time_label">Дата та час</string>
     <string name="category_label">Категорія</string>
     <string name="add_transaction_category">Додати категорію</string>
