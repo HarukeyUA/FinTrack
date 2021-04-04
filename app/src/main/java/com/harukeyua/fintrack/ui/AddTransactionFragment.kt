@@ -38,9 +38,9 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.harukeyua.fintrack.R
 import com.harukeyua.fintrack.adapters.AccountListChooserAdapter
-import com.harukeyua.fintrack.utils.currencyInputFilter
 import com.harukeyua.fintrack.databinding.AddTransactionFragmentBinding
 import com.harukeyua.fintrack.utils.HorizontalMarginItemDecoration
+import com.harukeyua.fintrack.utils.currencyInputFilter
 import com.harukeyua.fintrack.viewmodels.AddTransactionViewModel
 import com.harukeyua.fintrack.viewmodels.AmountErrorTypes
 import com.harukeyua.fintrack.viewmodels.Operation
@@ -200,8 +200,15 @@ class AddTransactionFragment : Fragment(), OnMapReadyCallback {
                     requireContext(),
                     getString(R.string.select_location_error),
                     Toast.LENGTH_SHORT
-                )
-                    .show()
+                ).show()
+            }
+        }
+
+        viewModel.navigateToOverview.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let {
+                val action =
+                    AddTransactionFragmentDirections.actionAddTransactionFragmentToOverviewFragment()
+                findNavController().navigate(action)
             }
         }
     }

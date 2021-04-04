@@ -61,6 +61,10 @@ class AddTransactionViewModel @Inject constructor(
     val locationCoorsError: LiveData<Event<Unit>>
         get() = _locationCoorsError
 
+    private val _navigateToOverview = MutableLiveData<Event<Unit>>()
+    val navigateToOverview: LiveData<Event<Unit>>
+        get() = _navigateToOverview
+
     private val _placesLikelihood = MutableLiveData<List<PlaceLikelihood>>()
     val placesLikelihood: LiveData<List<PlaceLikelihood>>
         get() = _placesLikelihood
@@ -191,6 +195,7 @@ class AddTransactionViewModel @Inject constructor(
             try {
                 finEditRepo.insertTransaction(transaction)
                 finEditRepo.updateAccount(account.copy(balance = resBalance))
+                _navigateToOverview.value = Event(Unit)
             } catch (e: Exception) {
                 e.printStackTrace()
                 _dbError.value = Event(e.localizedMessage ?: e.toString())
