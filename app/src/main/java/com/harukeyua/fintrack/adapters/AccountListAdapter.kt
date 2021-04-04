@@ -16,6 +16,7 @@ import com.harukeyua.fintrack.databinding.AddNewMoneyStoreItemBinding
 import com.harukeyua.fintrack.databinding.MoneyStoreCardItemBinding
 import com.harukeyua.fintrack.databinding.TotalBalanceCardBinding
 import com.harukeyua.fintrack.utils.getThemedColor
+import java.util.*
 
 class AccountListAdapter(val onAddClick: () -> Unit) :
     ListAdapter<Account, RecyclerView.ViewHolder>(AccountDiffCallback()) {
@@ -103,7 +104,7 @@ class AccountListAdapter(val onAddClick: () -> Unit) :
 
                 val iconDrawable = when (item.type) {
                     AccountType.CARD -> R.drawable.ic_credit_card
-                    AccountType.CASH -> R.drawable.ic_money
+                    AccountType.CASH -> R.drawable.ic_wallet
                     AccountType.MONO -> R.drawable.ic_credit_card
                 }
                 moneyStoreIcon.setImageResource(iconDrawable)
@@ -116,7 +117,7 @@ class AccountListAdapter(val onAddClick: () -> Unit) :
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
                 balanceAmount.text = spanned.toSpannable()
-                storeName.text = item.name.trim()
+                storeName.text = item.name.trim().capitalize(Locale.getDefault())
             }
         }
     }
