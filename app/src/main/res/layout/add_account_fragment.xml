@@ -73,7 +73,7 @@
         android:layout_marginEnd="@dimen/default_margin"
         android:hint="@string/account_balance_hint"
         app:startIconDrawable="@drawable/ic_wallet"
-        app:suffixText="UAH">
+        app:suffixText="@string/uah_label">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/accountBalanceText"
