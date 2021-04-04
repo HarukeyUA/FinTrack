@@ -45,7 +45,7 @@ class AccountListChooserAdapter :
 
                 val iconDrawable = when (item.type) {
                     AccountType.CARD -> R.drawable.ic_credit_card
-                    AccountType.CASH -> R.drawable.ic_money
+                    AccountType.CASH -> R.drawable.ic_wallet
                     AccountType.MONO -> R.drawable.ic_credit_card
                 }
                 accountIcon.setImageResource(iconDrawable)
