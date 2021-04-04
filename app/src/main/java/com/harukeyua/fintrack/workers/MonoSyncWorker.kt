@@ -2,6 +2,7 @@ package com.harukeyua.fintrack.workers
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.hilt.work.HiltWorker
@@ -46,6 +47,7 @@ class MonoSyncWorker @AssistedInject constructor(
     private val data = Data.Builder()
 
     override suspend fun doWork(): Result {
+        Log.d("MonoSyncWorker", "Started sync...")
         val token = encryptedSharedPrefs.getString(MONOBANK_KEY_PREF, "")
         token?.let {
             if (it.isNotEmpty()) {

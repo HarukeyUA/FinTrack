@@ -23,6 +23,7 @@ import com.harukeyua.fintrack.workers.MonoSyncWorker.Companion.RESULT_KEY
 import com.harukeyua.fintrack.workers.MonoSyncWorker.Companion.RETRY_DATA_KEY
 import com.harukeyua.fintrack.workers.SyncFailures
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -56,12 +57,13 @@ class TransactionsSyncFragment : Fragment() {
         }
         binding.monoStartSyncButton.setOnClickListener {
             val workRequest = OneTimeWorkRequest.Builder(MonoSyncWorker::class.java)
-                .setInputData(workDataOf(RETRY_DATA_KEY to false))
+                .setInputData(workDataOf(RETRY_DATA_KEY to false)).build()
             workManager.enqueueUniqueWork(
                 SYNC_WORKER_ID,
                 ExistingWorkPolicy.KEEP,
-                workRequest.build()
+                workRequest
             )
+            observeWorkState(workRequest.id)
         }
         binding.monoPeriodicSyncCheck.isChecked =
             requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -90,15 +92,32 @@ class TransactionsSyncFragment : Fragment() {
                 workManager.cancelUniqueWork(PERIODIC_SYNC_WORKER_ID)
             }
         }
+
+        binding.tokenRemoveButton.setOnClickListener {
+            viewModel.removeMonoAccounts()
+            // Disable periodic sync
+            requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .edit(commit = true) {
+                    putBoolean(PERIODIC_SYNC_PREF_KEY, false)
+                }
+            workManager.cancelUniqueWork(PERIODIC_SYNC_WORKER_ID)
+            // Remove personal information
+            encryptedSharedPreferences.edit(commit = true) {
+                putString(MONOBANK_NAME_PREF, "")
+                putString(MONOBANK_KEY_PREF, "")
+            }
+            updateUserInfo()
+        }
         observe()
     }
 
     private fun observe() {
         viewModel.lastSyncInfo.observe(viewLifecycleOwner) { syncInfo ->
-            if (syncInfo.isEmpty())
+            if (syncInfo.isEmpty()) {
                 binding.lastSyncStatusText.text =
                     getString(R.string.last_successful_sync_never_text)
-            else {
+                binding.lastSyncStatusText.setTextColor(requireContext().getThemedColor(R.attr.colorOnSurface))
+            } else {
                 val statusMessage =
                     if (syncInfo.first().isSuccess)
                         R.string.last_successful_sync_text
@@ -114,16 +133,46 @@ class TransactionsSyncFragment : Fragment() {
                 binding.lastSyncStatusText.setTextColor(statusTextColor)
             }
         }
+    }
 
-        workManager.getWorkInfosForUniqueWorkLiveData(SYNC_WORKER_ID)
+    private fun updateUserInfo() {
+        val isKeyMissing =
+            encryptedSharedPreferences.getString(MONOBANK_KEY_PREF, "").isNullOrEmpty()
+        val userName = encryptedSharedPreferences.getString(
+            MONOBANK_NAME_PREF,
+            getString(R.string.unknown_label)
+        )
+        with(binding) {
+            accountHolderName.text = getString(
+                R.string.mono_account_holder,
+                if (userName.isNullOrEmpty()) getString(R.string.unknown_label) else userName
+            )
+            if (isKeyMissing) {
+                syncStatusImage.setImageResource(R.drawable.ic_cloud_off)
+                monoKeyStatus.text = getString(R.string.missing_label)
+                monoKeyStatus.setTextColor(requireContext().getThemedColor(R.attr.colorError))
+                binding.monoPeriodicSyncCheck.isEnabled = false
+                binding.monoStartSyncButton.isEnabled = false
+            } else {
+                syncStatusImage.setImageResource(R.drawable.ic_cloud_ok)
+                monoKeyStatus.text = getString(R.string.token_ok_label)
+                monoKeyStatus.setTextColor(requireContext().getThemedColor(R.attr.colorPrimary))
+                binding.monoPeriodicSyncCheck.isEnabled = true
+                binding.monoStartSyncButton.isEnabled = true
+            }
+        }
+    }
+
+    private fun observeWorkState(uuid: UUID) {
+        workManager.getWorkInfoByIdLiveData(uuid)
             .observe(viewLifecycleOwner) { work ->
-                if (work.isNotEmpty()) {
-                    when (work.first().state) {
+                if (work != null) {
+                    when (work.state) {
                         WorkInfo.State.ENQUEUED -> binding.monoStartSyncButton.isEnabled = false
                         WorkInfo.State.RUNNING -> binding.monoStartSyncButton.isEnabled = false
                         WorkInfo.State.FAILED -> {
                             binding.monoStartSyncButton.isEnabled = true
-                            when (work.first().outputData.getInt(RESULT_KEY, 0)) {
+                            when (work.outputData.getInt(RESULT_KEY, 0)) {
                                 SyncFailures.CONNECTION_ERROR.code -> showToast(R.string.mono_account_error)
                                 SyncFailures.RATE_LIMIT.code -> showToast(R.string.mono_account_error_429)
                                 SyncFailures.AUTH_ERROR.code -> showToast(R.string.mono_account_error_403)
@@ -136,27 +185,6 @@ class TransactionsSyncFragment : Fragment() {
                     binding.monoStartSyncButton.isEnabled = true
                 }
             }
-    }
-
-    private fun updateUserInfo() {
-        val isKeyMissing =
-            encryptedSharedPreferences.getString(MONOBANK_KEY_PREF, "").isNullOrEmpty()
-        val userName = encryptedSharedPreferences.getString(
-            MONOBANK_NAME_PREF,
-            getString(R.string.unknown_label)
-        )
-        with(binding) {
-            accountHolderName.text = getString(R.string.mono_account_holder, userName)
-            if (isKeyMissing) {
-                syncStatusImage.setImageResource(R.drawable.ic_cloud_off)
-                monoKeyStatus.text = getString(R.string.missing_label)
-                monoKeyStatus.setTextColor(requireContext().getThemedColor(R.attr.colorError))
-            } else {
-                syncStatusImage.setImageResource(R.drawable.ic_cloud_ok)
-                monoKeyStatus.text = getString(R.string.token_ok_label)
-                monoKeyStatus.setTextColor(requireContext().getThemedColor(R.attr.colorPrimary))
-            }
-        }
     }
 
     private fun showToast(stringResource: Int) {

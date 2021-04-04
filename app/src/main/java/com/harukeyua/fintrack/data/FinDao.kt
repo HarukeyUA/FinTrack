@@ -94,4 +94,7 @@ interface FinDao {
 
     @Query("SELECT * FROM transactionTypes WHERE NOT mccCode = -1")
     suspend fun getMccTransactionTypesList(): List<TransactionType>
+
+    @Query("DELETE FROM SyncInfo")
+    suspend fun deleteSyncInfo()
 }
