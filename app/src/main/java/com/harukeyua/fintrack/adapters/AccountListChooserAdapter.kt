@@ -10,6 +10,7 @@ import com.harukeyua.fintrack.data.model.Account
 import com.harukeyua.fintrack.data.model.AccountType
 import com.harukeyua.fintrack.databinding.AccountSmallCardBinding
 import com.harukeyua.fintrack.utils.getThemedColor
+import java.util.*
 
 class AccountListChooserAdapter :
     ListAdapter<Account, AccountListChooserAdapter.AccountViewHolder>(AccountDiffCallback()) {
@@ -48,7 +49,7 @@ class AccountListChooserAdapter :
                     AccountType.MONO -> R.drawable.ic_credit_card
                 }
                 accountIcon.setImageResource(iconDrawable)
-                accountName.text = item.name.trim()
+                accountName.text = item.name.trim().capitalize(Locale.getDefault())
 
                 root.isChecked = selectedCard == position
 
