@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -174,10 +175,13 @@ class StatsFragment : Fragment() {
 
             dataSet.setDrawIcons(false)
             dataSet.sliceSpace = 3f
+            dataSet.selectionShift = 0f
             val colors = ColorTemplate.JOYFUL_COLORS.toMutableList()
             colors.addAll(ColorTemplate.MATERIAL_COLORS.toList())
             colors.addAll(ColorTemplate.COLORFUL_COLORS.toList())
             colors.addAll(ColorTemplate.PASTEL_COLORS.toList())
+            colors.addAll(ColorTemplate.LIBERTY_COLORS.toList())
+            colors.addAll(ColorTemplate.VORDIPLOM_COLORS.toList())
             dataSet.colors = colors
             val data = PieData(dataSet)
             data.setValueFormatter(CustomFormatter(binding.pieChartExpenses))
@@ -191,10 +195,13 @@ class StatsFragment : Fragment() {
 
             dataSet.setDrawIcons(false)
             dataSet.sliceSpace = 3f
+            dataSet.selectionShift = 0f
             val colors = ColorTemplate.JOYFUL_COLORS.toMutableList()
             colors.addAll(ColorTemplate.MATERIAL_COLORS.toList())
             colors.addAll(ColorTemplate.COLORFUL_COLORS.toList())
             colors.addAll(ColorTemplate.PASTEL_COLORS.toList())
+            colors.addAll(ColorTemplate.LIBERTY_COLORS.toList())
+            colors.addAll(ColorTemplate.VORDIPLOM_COLORS.toList())
             dataSet.colors = colors
             val data = PieData(dataSet)
             data.setValueFormatter(CustomFormatter(binding.pieChartExpenses))
@@ -208,10 +215,13 @@ class StatsFragment : Fragment() {
 
             dataSet.setDrawIcons(false)
             dataSet.sliceSpace = 3f
+            dataSet.selectionShift = 0f
             val colors = ColorTemplate.JOYFUL_COLORS.toMutableList()
             colors.addAll(ColorTemplate.MATERIAL_COLORS.toList())
             colors.addAll(ColorTemplate.COLORFUL_COLORS.toList())
             colors.addAll(ColorTemplate.PASTEL_COLORS.toList())
+            colors.addAll(ColorTemplate.LIBERTY_COLORS.toList())
+            colors.addAll(ColorTemplate.VORDIPLOM_COLORS.toList())
             dataSet.colors = colors
             val data = PieData(dataSet)
             data.setValueFormatter(CustomFormatter(binding.pieChartExpenses))

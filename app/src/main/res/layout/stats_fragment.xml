@@ -168,13 +168,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
                     android:text="@string/expenses_by_categories_chart"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1" />
 
                 <com.github.mikephil.charting.charts.PieChart
                     android:id="@+id/pie_chart_expenses"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp" />
+                    android:layout_height="250dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -194,6 +195,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
                     android:text="@string/income_by_categories_chart"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1" />
 
@@ -210,6 +212,7 @@
             android:layout_marginStart="@dimen/default_margin"
             android:layout_marginTop="@dimen/default_margin"
             android:layout_marginEnd="@dimen/default_margin"
+            android:layout_marginBottom="4dp"
             app:contentPadding="@dimen/small_padding">
 
             <LinearLayout
