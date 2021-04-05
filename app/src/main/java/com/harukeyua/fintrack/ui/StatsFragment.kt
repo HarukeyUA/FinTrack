@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -165,7 +166,7 @@ class StatsFragment : Fragment() {
             colors.addAll(ColorTemplate.PASTEL_COLORS.toList())
             dataSet.colors = colors
             val data = PieData(dataSet)
-            data.setValueFormatter(PercentFormatter(binding.pieChartExpenses))
+            data.setValueFormatter(CustomFormatter(binding.pieChartExpenses))
             data.setValueTextSize(14f)
             binding.pieChartExpenses.data = data
             binding.pieChartExpenses.invalidate()
@@ -182,12 +183,19 @@ class StatsFragment : Fragment() {
             colors.addAll(ColorTemplate.PASTEL_COLORS.toList())
             dataSet.colors = colors
             val data = PieData(dataSet)
-            data.setValueFormatter(PercentFormatter(binding.pieChartIncome))
+            data.setValueFormatter(CustomFormatter(binding.pieChartExpenses))
             data.setValueTextSize(14f)
             binding.pieChartIncome.data = data
             binding.pieChartIncome.invalidate()
         }
     }
 
+}
+
+class CustomFormatter(chart: PieChart): PercentFormatter(chart) {
+    override fun getFormattedValue(value: Float): String {
+        val valueString = super.getFormattedValue(value)
+        return if (value < 5f) "" else valueString
+    }
 }
 

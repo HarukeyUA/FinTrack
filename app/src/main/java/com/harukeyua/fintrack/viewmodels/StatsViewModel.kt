@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieEntry
 import com.harukeyua.fintrack.repos.FinInfoRepo
 import com.harukeyua.fintrack.utils.getFloatBalance
@@ -49,7 +48,7 @@ class StatsViewModel @Inject constructor(repo: FinInfoRepo) : ViewModel() {
                         ?: 0f,
                     it.key
                 )
-            }
+            }.sortedBy { it.value }
         }
 
     val transactionsIncomeTypeChartData = Transformations.map(transactionsInfoInDateRange) { list ->
@@ -58,7 +57,7 @@ class StatsViewModel @Inject constructor(repo: FinInfoRepo) : ViewModel() {
                 getFloatBalance(it.value.sumOf { transaction -> abs(transaction.amount) }) ?: 0f,
                 it.key
             )
-        }
+        }.sortedBy { it.value }
     }
 
     fun setDate(start: OffsetDateTime, end: OffsetDateTime) {
