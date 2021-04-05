@@ -75,4 +75,5 @@
     <string name="sync_now_button">Sync now</string>
     <string name="sync_every_12_hours_check">Sync every 12 hours</string>
     <string name="periodic_sync_label">Periodic sync</string>
+    <string name="expenses_by_places_label">Expenses by places</string>
 </resources>

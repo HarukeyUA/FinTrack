@@ -60,6 +60,15 @@ class StatsViewModel @Inject constructor(repo: FinInfoRepo) : ViewModel() {
         }.sortedBy { it.value }
     }
 
+    val transactionsPlaceChartData = Transformations.map(transactionsInDateRange) { list ->
+        list.filter { it.location != null && it.amount < 0 }.groupBy { it.location?.name }.map {
+            PieEntry(
+                getFloatBalance(it.value.sumOf { transaction -> abs(transaction.amount) }) ?: 0f,
+                it.key
+            )
+        }.sortedBy { it.value }
+    }
+
     fun setDate(start: OffsetDateTime, end: OffsetDateTime) {
         _selectedDateRange.value = Pair(start, end)
     }

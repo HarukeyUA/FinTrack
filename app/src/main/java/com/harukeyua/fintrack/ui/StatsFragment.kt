@@ -89,6 +89,20 @@ class StatsFragment : Fragment() {
             legend.textSize = 12f
             invalidate()
         }
+
+        with(binding.pieChartPlaces) {
+            setUsePercentValues(true)
+            description.isEnabled = false
+            animateY(1400, Easing.EaseInOutQuad)
+            setDrawEntryLabels(false)
+            extraRightOffset = 40f
+            legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
+            legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
+            legend.setDrawInside(false)
+            legend.orientation = Legend.LegendOrientation.VERTICAL
+            legend.textSize = 12f
+            invalidate()
+        }
     }
 
     private fun showDatePicker() {
@@ -187,6 +201,23 @@ class StatsFragment : Fragment() {
             data.setValueTextSize(14f)
             binding.pieChartIncome.data = data
             binding.pieChartIncome.invalidate()
+        }
+
+        viewModel.transactionsPlaceChartData.observe(viewLifecycleOwner) { list ->
+            val dataSet = PieDataSet(list, null)
+
+            dataSet.setDrawIcons(false)
+            dataSet.sliceSpace = 3f
+            val colors = ColorTemplate.JOYFUL_COLORS.toMutableList()
+            colors.addAll(ColorTemplate.MATERIAL_COLORS.toList())
+            colors.addAll(ColorTemplate.COLORFUL_COLORS.toList())
+            colors.addAll(ColorTemplate.PASTEL_COLORS.toList())
+            dataSet.colors = colors
+            val data = PieData(dataSet)
+            data.setValueFormatter(CustomFormatter(binding.pieChartExpenses))
+            data.setValueTextSize(14f)
+            binding.pieChartPlaces.data = data
+            binding.pieChartPlaces.invalidate()
         }
     }
 

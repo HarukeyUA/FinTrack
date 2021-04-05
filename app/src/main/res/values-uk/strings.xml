@@ -70,4 +70,5 @@
     <string name="sync_now_button">Синхронізувати</string>
     <string name="sync_every_12_hours_check">Синхронізувати кожні 12 годин</string>
     <string name="periodic_sync_label">Періодична синхронізація</string>
+    <string name="expenses_by_places_label">Витрати за місцями</string>
 </resources>
