@@ -27,7 +27,7 @@ interface MonobankService {
 
         fun create(): MonobankService {
             val interceptor = HttpLoggingInterceptor()
-            interceptor.level = HttpLoggingInterceptor.Level.BODY
+            interceptor.level = HttpLoggingInterceptor.Level.BASIC
             val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
             return Retrofit.Builder()
                 .baseUrl(BASE_URL)
