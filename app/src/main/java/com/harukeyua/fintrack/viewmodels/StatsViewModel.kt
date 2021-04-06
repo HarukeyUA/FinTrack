@@ -62,9 +62,10 @@ class StatsViewModel @Inject constructor(repo: FinInfoRepo) : ViewModel() {
 
     val transactionsPlaceChartData = Transformations.map(transactionsInDateRange) { list ->
         list.filter { it.location != null && it.amount < 0 }.groupBy { it.location?.name }.map {
+            val label = if (it.key!!.length > 20) "${it.key!!.take(20)}..." else it.key
             PieEntry(
                 getFloatBalance(it.value.sumOf { transaction -> abs(transaction.amount) }) ?: 0f,
-                it.key
+                label
             )
         }.sortedBy { it.value }
     }
