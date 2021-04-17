@@ -101,6 +101,7 @@ class TransactionsSyncFragment : Fragment() {
                     putBoolean(PERIODIC_SYNC_PREF_KEY, false)
                 }
             workManager.cancelUniqueWork(PERIODIC_SYNC_WORKER_ID)
+            binding.monoPeriodicSyncCheck.isChecked = false
             // Remove personal information
             encryptedSharedPreferences.edit(commit = true) {
                 putString(MONOBANK_NAME_PREF, "")

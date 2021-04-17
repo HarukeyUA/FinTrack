@@ -9,8 +9,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
-import com.harukeyua.fintrack.adapters.AccountListAdapter
-import com.harukeyua.fintrack.adapters.TransactionPagingAdapter
+import com.harukeyua.fintrack.ui.adapters.AccountListAdapter
+import com.harukeyua.fintrack.ui.adapters.TransactionPagingAdapter
 import com.harukeyua.fintrack.databinding.OverviewFragmentBinding
 import com.harukeyua.fintrack.viewmodels.OverviewViewModel
 import dagger.hilt.android.AndroidEntryPoint

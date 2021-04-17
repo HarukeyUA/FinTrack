@@ -51,26 +51,6 @@ class FinInfoRepo @Inject constructor(private val dao: FinDao) {
             }
     }
 
-    fun transactionsListByType(typeId: Int) = Pager(
-        config = PagingConfig(
-            pageSize = 60,
-            enablePlaceholders = true,
-            maxSize = 200
-        )
-    ) {
-        dao.getTransactionsPagingByType(typeId)
-    }.flow
-
-    fun transactionsList() = Pager(
-        config = PagingConfig(
-            pageSize = 60,
-            enablePlaceholders = true,
-            maxSize = 200
-        )
-    ) {
-        dao.getTransactionsPaging()
-    }.flow
-
     fun getTransactionsInDateRange(range: Pair<OffsetDateTime, OffsetDateTime>): LiveData<List<Transaction>> {
         return dao.getTransactionsInDateRange(
             range.first,

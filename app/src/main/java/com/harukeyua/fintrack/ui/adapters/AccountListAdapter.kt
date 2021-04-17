@@ -1,4 +1,4 @@
-package com.harukeyua.fintrack.adapters
+package com.harukeyua.fintrack.ui.adapters
 
 import android.text.SpannableStringBuilder
 import android.text.Spanned

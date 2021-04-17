@@ -10,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.harukeyua.fintrack.adapters.ChartsListAdapter
+import com.harukeyua.fintrack.ui.adapters.ChartsListAdapter
 import com.harukeyua.fintrack.databinding.AccountsChartsFragmentBinding
 import com.harukeyua.fintrack.viewmodels.AccountsChartsViewModel
 import dagger.hilt.android.AndroidEntryPoint
