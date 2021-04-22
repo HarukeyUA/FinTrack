@@ -21,10 +21,14 @@ class MonobankSyncRepo @Inject constructor(
     private val db: FinDatabase
 ) {
 
-    suspend fun updateMonoClientInfoSync(key: String): Resource<ClientInfo> {
+    suspend fun monoClientInfoSync(
+        key: String,
+        mccList: List<MccCategory>
+    ): Resource<ClientInfo> {
         return try {
             val clientInfo = service.getAccountInfo(key)
             updateMonoAccounts(clientInfo.accounts)
+            syncTransactions(key, mccList)
             Resource.Success(clientInfo)
         } catch (e: HttpException) {
             Log.e(TAG, "Error requesting client info", e)
@@ -71,59 +75,43 @@ class MonobankSyncRepo @Inject constructor(
         }
     }
 
-    suspend fun syncTransactions(key: String, mccList: List<MccCategory>): Resource<Unit> {
-        return try {
-            val syncInfo = db.finDao().getLatestSyncInfoList()
-            val monoAccounts = db.finDao().getMonoAccountsList()
-            val from = if (syncInfo.isEmpty()) OffsetDateTime.now()
-                .minusMonths(1) else syncInfo.first().syncDateTime
+    private suspend fun syncTransactions(key: String, mccList: List<MccCategory>) {
+        val syncInfo = db.finDao().getLatestSyncInfoList()
+        val monoAccounts = db.finDao().getMonoAccountsList()
+        val from = if (syncInfo.isEmpty()) OffsetDateTime.now()
+            .minusMonths(1) else syncInfo.first().syncDateTime
 
-            monoAccounts.forEach { account ->
-                val statements =
-                    service.getStatements(key, account.monoId ?: "0", from.toEpochSecond())
+        monoAccounts.forEach { account ->
+            val statements =
+                service.getStatements(key, account.monoId ?: "0", from.toEpochSecond())
 
-                val mccCategories = insertMissingTypes(statements, mccList)
+            val mccCategories = insertMissingTypes(statements, mccList)
 
-                val toInsert = statements.map { statement ->
-                    val transactionType = mccCategories.find { it.mccCode == statement.mcc }
-                    val dateTime = OffsetDateTime.ofInstant(
-                        Instant.ofEpochSecond(statement.time),
-                        ZoneOffset.systemDefault()
-                    )
-                    Transaction(
-                        transactionTypeId = transactionType!!.id,
-                        accountId = account.id,
-                        amount = statement.amount,
-                        description = statement.description,
-                        balance = statement.balance,
-                        monoId = statement.id,
-                        dateTime = dateTime
-                    )
-                }
-
-                db.withTransaction {
-                    db.finDao().insertSyncInfo(SyncInfo(1, OffsetDateTime.now(), true))
-                    db.finDao().insertTransaction(toInsert)
-                    Log.i(
-                        TAG,
-                        "Successfully inserted ${toInsert.size} transaction entries for account ${account.monoCardType}"
-                    )
-                }
+            val toInsert = statements.map { statement ->
+                val transactionType = mccCategories.find { it.mccCode == statement.mcc }
+                val dateTime = OffsetDateTime.ofInstant(
+                    Instant.ofEpochSecond(statement.time),
+                    ZoneOffset.systemDefault()
+                )
+                Transaction(
+                    transactionTypeId = transactionType!!.id,
+                    accountId = account.id,
+                    amount = statement.amount,
+                    description = statement.description,
+                    balance = statement.balance,
+                    monoId = statement.id,
+                    dateTime = dateTime
+                )
             }
 
-            Resource.Success(Unit)
-        } catch (e: HttpException) {
-            Log.e(TAG, "Error requesting statements list", e)
-            db.finDao().insertSyncInfo(SyncInfo(1, OffsetDateTime.now(), false))
-            Resource.ApiError(e.code())
-        } catch (e: IOException) {
-            Log.e(TAG, "Error requesting statements list", e)
-            db.finDao().insertSyncInfo(SyncInfo(1, OffsetDateTime.now(), false))
-            Resource.ExceptionError(e.message ?: "")
-        } catch (e: Exception) {
-            Log.e(TAG, "Something borked", e)
-            db.finDao().insertSyncInfo(SyncInfo(1, OffsetDateTime.now(), false))
-            Resource.ExceptionError(e.message ?: "")
+            db.withTransaction {
+                db.finDao().insertSyncInfo(SyncInfo(1, OffsetDateTime.now(), true))
+                db.finDao().insertTransaction(toInsert)
+                Log.i(
+                    TAG,
+                    "Successfully inserted ${toInsert.size} transaction entries for account ${account.monoCardType}"
+                )
+            }
         }
 
     }

@@ -51,17 +51,10 @@ class MonoSyncWorker @AssistedInject constructor(
         val token = encryptedSharedPrefs.getString(MONOBANK_KEY_PREF, "")
         token?.let {
             if (it.isNotEmpty()) {
-                when (val updateUserInfoResult = repo.updateMonoClientInfoSync(token)) {
-                    is Resource.ApiError -> return handleApiError(updateUserInfoResult.errorCode)
-                    is Resource.ExceptionError -> return if (tryToRetry) Result.retry() else Result.failure(
-                        data.putInt(RESULT_KEY, SyncFailures.CONNECTION_ERROR.code).build()
-                    )
-                    else -> Unit
-                }
-
                 val list = loadMccList()
-                return when (val result = repo.syncTransactions(token, list)) {
-                    is Resource.ApiError -> handleApiError(result.errorCode)
+                return when (val updateUserInfoResult =
+                    repo.monoClientInfoSync(token, list)) {
+                    is Resource.ApiError -> handleApiError(updateUserInfoResult.errorCode)
                     is Resource.ExceptionError -> if (tryToRetry) Result.retry() else Result.failure(
                         data.putInt(RESULT_KEY, SyncFailures.CONNECTION_ERROR.code).build()
                     )
