@@ -36,9 +36,6 @@ interface FinDao {
     @Query("SELECT * FROM transactions ORDER BY datetime(dateTime) DESC")
     fun getTransactionsPaging(): PagingSource<Int, Transaction>
 
-    @Query("SELECT * FROM transactions WHERE transactionTypeId = :typeId ORDER BY datetime(dateTime) DESC")
-    fun getTransactionsPagingByType(typeId: Int): PagingSource<Int, Transaction>
-
     @Query("SELECT * FROM transactions WHERE accountId = :accountId ORDER BY datetime(dateTime) DESC")
     fun getTransactionsPagingByAccount(accountId: Int): PagingSource<Int, Transaction>
 
@@ -50,14 +47,6 @@ interface FinDao {
 
     @Query("SELECT * FROM accounts ORDER BY name ASC")
     suspend fun getAccountsList(): List<Account>
-
-    @androidx.room.Transaction
-    @Query("SELECT * FROM accounts ORDER BY name ASC")
-    fun getAccountWithTransactions(): LiveData<List<AccountWithTransactions>>
-
-    @androidx.room.Transaction
-    @Query("SELECT * FROM transactionTypes ORDER BY name ASC")
-    fun getTransactionTypeWithTransactions(): LiveData<List<TransactionTypeWithTransactions>>
 
     @Query("SELECT * FROM transactions WHERE dateTime(dateTime) BETWEEN dateTime(:startDate) AND dateTime(:endDate) ORDER By dateTime(dateTime)")
     fun getTransactionsInDateRange(
