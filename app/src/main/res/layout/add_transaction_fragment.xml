@@ -57,6 +57,7 @@
                 app:startIconDrawable="@drawable/ic_comment">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/transaction_description_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text|textCapSentences"
@@ -112,6 +113,7 @@
                 app:suffixText="@string/uah_label">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/transaction_amount_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal" />
@@ -227,6 +229,7 @@
                 app:startIconDrawable="@drawable/ic_location">
 
                 <AutoCompleteTextView
+                    android:id="@+id/place_name_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"

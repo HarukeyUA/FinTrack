@@ -23,8 +23,7 @@ enum class AmountErrorTypes { EMPTY, ZERO, FORMAT }
 class AddTransactionViewModel @Inject constructor(
     private val finInfoRepo: FinInfoRepo,
     private val finEditRepo: FinEditRepo
-) :
-    ViewModel() {
+) : ViewModel() {
 
     val accountsList =
         finInfoRepo.accountsList.map { accountsList -> accountsList.filter { it.type != AccountType.MONO } }

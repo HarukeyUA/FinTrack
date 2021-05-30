@@ -16,18 +16,17 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.Task
-import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
@@ -36,9 +35,10 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import com.google.maps.android.ktx.awaitMap
 import com.harukeyua.fintrack.R
-import com.harukeyua.fintrack.ui.adapters.AccountListChooserAdapter
 import com.harukeyua.fintrack.databinding.AddTransactionFragmentBinding
+import com.harukeyua.fintrack.ui.adapters.AccountListChooserAdapter
 import com.harukeyua.fintrack.utils.HorizontalMarginItemDecoration
 import com.harukeyua.fintrack.utils.currencyInputFilter
 import com.harukeyua.fintrack.viewmodels.AddTransactionViewModel
@@ -48,9 +48,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class AddTransactionFragment : Fragment(), OnMapReadyCallback {
+class AddTransactionFragment : Fragment() {
 
     private val viewModel: AddTransactionViewModel by viewModels()
 
@@ -61,11 +62,13 @@ class AddTransactionFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var placesAutocompleteAdapter: ArrayAdapter<String>
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    @Inject
+    lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private lateinit var activityResult: ActivityResultLauncher<String>
 
-    private lateinit var placesClient: PlacesClient
+    @Inject
+    lateinit var placesClient: PlacesClient
 
     private var map: GoogleMap? = null
 
@@ -103,13 +106,22 @@ class AddTransactionFragment : Fragment(), OnMapReadyCallback {
         observe()
         setupListeners()
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        placesClient = Places.createClient(requireContext())
-
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment?.getMapAsync(this)
+        lifecycle.coroutineScope.launchWhenCreated {
+            val googleMap = mapFragment?.awaitMap()
+            setupMap(googleMap)
+            // After configuration change map will not be ready when observer executes, so update it here too
+            viewModel.selectedLocation.value?.let {
+                updateCurrentLocationMarker(it)
+            }
+        }
 
         return binding.root
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     private fun observe() {
@@ -177,15 +189,7 @@ class AddTransactionFragment : Fragment(), OnMapReadyCallback {
         }
 
         viewModel.selectedLocation.observe(viewLifecycleOwner) { location ->
-            map?.let {
-                map?.animateCamera(
-                    CameraUpdateFactory.newLatLngZoom(
-                        location, DEFAULT_ZOOM_LEVEL
-                    )
-                )
-                map?.clear()
-                map?.addMarker(MarkerOptions().position(location))
-            }
+            updateCurrentLocationMarker(location)
         }
 
         viewModel.locationNameError.observe(viewLifecycleOwner) { event ->
@@ -210,6 +214,18 @@ class AddTransactionFragment : Fragment(), OnMapReadyCallback {
                     AddTransactionFragmentDirections.actionAddTransactionFragmentToOverviewFragment()
                 findNavController().navigate(action)
             }
+        }
+    }
+
+    private fun updateCurrentLocationMarker(location: LatLng) {
+        map?.let {
+            map?.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    location, DEFAULT_ZOOM_LEVEL
+                )
+            )
+            map?.clear()
+            map?.addMarker(MarkerOptions().position(location))
         }
     }
 
@@ -348,18 +364,22 @@ class AddTransactionFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    override fun onMapReady(p0: GoogleMap?) {
+    private fun setupMap(p0: GoogleMap?) {
         map = p0
         map?.setOnMapClickListener {
-            LocationPickerFragment.display(childFragmentManager) {
-                viewModel.setPointLocation(it)
-            }
+            openLocationPicker()
         }
         map?.setOnMyLocationButtonClickListener {
             populateCurrentPLaceAutoCompletion()
             false
         }
         setupLocation()
+    }
+
+    private fun openLocationPicker() {
+        LocationPickerFragment.display(childFragmentManager) {
+            viewModel.setPointLocation(it)
+        }
     }
 
     @SuppressLint("MissingPermission")

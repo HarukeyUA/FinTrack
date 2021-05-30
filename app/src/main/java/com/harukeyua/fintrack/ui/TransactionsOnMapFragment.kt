@@ -13,30 +13,33 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.coroutineScope
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
 import com.google.maps.android.clustering.ClusterItem
 import com.google.maps.android.clustering.ClusterManager
+import com.google.maps.android.ktx.awaitMap
 import com.harukeyua.fintrack.R
 import com.harukeyua.fintrack.databinding.TransactionsOnMapFragmentBinding
 import com.harukeyua.fintrack.utils.getConvertedBalance
 import com.harukeyua.fintrack.viewmodels.TransactionsOnMapViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class TransactionsOnMapFragment : Fragment(), OnMapReadyCallback {
+class TransactionsOnMapFragment : Fragment() {
 
     private val viewModel: TransactionsOnMapViewModel by viewModels()
 
     private var _binding: TransactionsOnMapFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    @Inject
+    lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private lateinit var activityResult: ActivityResultLauncher<String>
 
@@ -59,10 +62,16 @@ class TransactionsOnMapFragment : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment?.getMapAsync(this)
+        lifecycle.coroutineScope.launchWhenCreated {
+            val googleMap = mapFragment?.awaitMap()
+            setupMap(googleMap)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     private fun setUpClusterer() {
@@ -147,7 +156,7 @@ class TransactionsOnMapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    override fun onMapReady(p0: GoogleMap?) {
+    private fun setupMap(p0: GoogleMap?) {
         map = p0
         setupLocation()
         setUpClusterer()

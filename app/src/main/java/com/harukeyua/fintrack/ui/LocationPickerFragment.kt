@@ -10,24 +10,28 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.coroutineScope
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
+import com.google.maps.android.ktx.awaitMap
 import com.harukeyua.fintrack.R
 import com.harukeyua.fintrack.databinding.LocationPickerFragmentBinding
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-class LocationPickerFragment(val onLocationPick: (location: LatLng) -> Unit) : DialogFragment(),
-    OnMapReadyCallback {
+@AndroidEntryPoint
+class LocationPickerFragment(val onLocationPick: (location: LatLng) -> Unit) : DialogFragment() {
 
     private lateinit var toolbar: Toolbar
 
     private var map: GoogleMap? = null
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    @Inject
+    lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,8 +50,10 @@ class LocationPickerFragment(val onLocationPick: (location: LatLng) -> Unit) : D
             true
         }
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        mapFragment?.getMapAsync(this)
+        lifecycle.coroutineScope.launchWhenCreated {
+            val googleMap = mapFragment?.awaitMap()
+            setupMap(googleMap)
+        }
         return binding.root
     }
 
@@ -66,7 +72,7 @@ class LocationPickerFragment(val onLocationPick: (location: LatLng) -> Unit) : D
         setStyle(STYLE_NORMAL, R.style.AppTheme_FullScreenDialog)
     }
 
-    override fun onMapReady(p0: GoogleMap?) {
+    private fun setupMap(p0: GoogleMap?) {
         map = p0
 
         val locationRequest = LocationRequest.create().apply {
